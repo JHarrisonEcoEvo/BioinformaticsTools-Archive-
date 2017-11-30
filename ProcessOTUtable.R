@@ -1,8 +1,9 @@
 #!/usr/bin/Rscript
 #J. G. Harrison
 
-#This script takes an OTU table (csv) as input where rows are samples, 
-#columns are otus, and cells are filled with raw read counts.
+#This script takes an OTU table (csv) as input where rows are otus, 
+#columns are samples, and cells are filled with raw read counts. Note that if you get weird results
+#you probably have your input matrix transposed!
 #The output will include a TMM normalized OTU table (as per Mcurmdie and Holmes 2012)
 #and several rarified tables (1k, 5k, 10k reads), note in many cases you may
 #want to try analyses without samples with low coverage, these won't be rarefied of course.
@@ -28,7 +29,7 @@ main <- function() {
 #Perform work on the input file(s)
 process <- function(filename) {
   dat <- read.csv(file = filename, header = T) #here is where you could swap to tab separated.
-
+  
   #Normalize via the TMM method, RLE often fails with sparse data
   fungi = edgeR::DGEList(counts=as.matrix(t(dat[,2:length(dat)])), group=as.matrix(dat[,1]))
   
@@ -41,16 +42,15 @@ process <- function(filename) {
   abrv_filename = basename(filename)
   write.csv(t(nc), file=paste("./TMMnormalized_", abrv_filename, sep=""))
   
-  write.csv(vegan::rarefy(dat[,2:length(dat)], sample=1000), 
+  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=1000), 
             file=paste("./1krarefied_", abrv_filename, sep=""))
-  write.csv(vegan::rarefy(dat[,2:length(dat)], sample=5000)
+  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=5000)
             , file=paste("./5krarefied_", abrv_filename, sep=""))
-  write.csv(vegan::rarefy(dat[,2:length(dat)], sample=10000)
-             , file=paste("./10k_rarefied", abrv_filename, sep=""))
+  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=10000)
+            , file=paste("./10k_rarefied", abrv_filename, sep=""))
   
 }
 
 main()  
 
 
- 
