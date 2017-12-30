@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 #J. G. Harrison
-
+library("edgeR")
 #This script takes an OTU table (csv) as input where rows are otus, 
 #columns are samples, and cells are filled with raw read counts. Note that if you get weird results
 #you probably have your input matrix transposed!
@@ -31,24 +31,33 @@ process <- function(filename) {
   dat <- read.csv(file = filename, header = T) #here is where you could swap to tab separated.
   
   #Normalize via the TMM method, RLE often fails with sparse data
-  fungi = edgeR::DGEList(counts=as.matrix(t(dat[,2:length(dat)])), group=as.matrix(dat[,1]))
+  fungi = DGEList(counts=as.matrix(t(dat[,2:length(dat)])), group=as.matrix(dat[,1]))
   
-  y=edgeR::calcNormFactors(fungi, method="TMM")
+  y=calcNormFactors(fungi, method="TMM")
   
   #get normalized counts
-  nc=edgeR::cpm(y, normalized.lib.sizes=T)
+  nc=cpm(y, normalized.lib.sizes=T)
+  colnames(nc) = dat[,1]
   
   #make a filename that only has the file, not its whole path, this aids naming the out file
   abrv_filename = basename(filename)
   write.csv(t(nc), file=paste("./TMMnormalized_", abrv_filename, sep=""))
   
-  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=1000), 
-            file=paste("./1krarefied_", abrv_filename, sep=""))
-  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=5000)
-            , file=paste("./5krarefied_", abrv_filename, sep=""))
-  write.csv(vegan::rrarefy(t(dat[,2:length(dat)]), sample=10000)
-            , file=paste("./10k_rarefied", abrv_filename, sep=""))
+  rr  = vegan::rrarefy(t(dat[,2:length(dat)]), sample=1000)
+  colnames(rr) = dat[,1]
+  write.csv(rr, file=paste("./1krarefied_", abrv_filename, sep=""))
   
+  rr  = vegan::rrarefy(t(dat[,2:length(dat)]), sample=5000)
+  colnames(rr) = dat[,1]
+  write.csv(rr, file=paste("./5krarefied_", abrv_filename, sep=""))
+  
+  rr  = vegan::rrarefy(t(dat[,2:length(dat)]), sample=10000)
+  colnames(rr) = dat[,1]
+  write.csv(rr, file=paste("./10k_rarefied", abrv_filename, sep=""))
+  
+  rr  = vegan::rrarefy(t(dat[,2:length(dat)]), sample=20000)
+  colnames(rr) = dat[,1]
+  write.csv(rr, file=paste("./20k_rarefied", abrv_filename, sep=""))
 }
 
 main()  
