@@ -51,6 +51,9 @@ touch out/Processing_Summary.txt
 # ####Step 1. Examine quality of reads
 # #######################################
 
+#the main benefit to this step is to see how many reads get cut. 
+#really it can be skipped because of the filtering done later
+
 mkdir fastq_info
 
 for fq in *fastq
@@ -124,9 +127,9 @@ done
 #Note that I am just checking for a few samples, as all samples should be the same
 #note the database for comparison may need a new path, or be changed if you have a different db
 
-cat `ls *merged* | head -n 5` > testFiles.fq
+cat `ls *merged.fq | head -n 5` > testFiles.fq
 
-usearch -orient testFiles -db db/rdp_16s_v16_sp.fa -tabbedout orient_out.txt
+usearch -orient testFiles.fq -db db/rdp_its_v2.fa -tabbedout orient_out.txt
 
 #this should show most reads are + or ? (the latter being ones that didn't match anything in the db)
 
@@ -134,7 +137,7 @@ echo "Sequence orientation for the first 5 samples." >> out/Processing_Summary.t
 
 orient=`eval cut -f2 orient_out.txt | sort | uniq -c`  
 
-echo $orient >> out/Processing_Summary.txt
+echo "$orient" >> out/Processing_Summary.txt
 
 rm -rf orient_out.txt
 rm -rf testFiles.fq
@@ -148,7 +151,7 @@ rm -rf testFiles.fq
  
 for f in *merged.fq
 do
-	usearch -fastx_truncate $f -stripleft 18 -stripright 20 -fastqout ${f}stripped.fq
+	usearch -fastx_truncate $f -stripleft 22 -stripright 20 -fastqout ${f}stripped.fq
 done
 
 #Note we don't do any more length trimming because we are using merged reads
@@ -241,19 +244,38 @@ rm -rf zotuspre[0-9].fa
 rm -rf otus97pre[0-9].fa
 rm -rf otus970.fa
 
+#check for offset sequences
+usearch -cluster_fast otus97.fa -id 0.97 -strand both -alnout otus.aln -show_termgaps -userout offsetcheck97.txt -userfields query+target+qstrand+qlo+qhi+tlo+thi
+echo "If there is anything here then you should check the file offsetcheck97.txt and see which reads may be messed up" >> out/Processing_Summary.txt
+echo `eval cut -f4 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+echo `eval cut -f6 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+mv offsetcheck97.txt out/
+
+#do for zotus
+usearch -cluster_fast zotus.fa -id 0.97 -strand both -alnout otus.aln -show_termgaps -userout offsetcheckZ.txt -userfields query+target+qstrand+qlo+qhi+tlo+thi
+echo "If there is anything here then you should check the file offsetcheck97.txt and see which reads may be messed up" >> out/Processing_Summary.txt
+echo `eval cut -f4 offsetcheckZ.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+echo `eval cut -f6 offsetcheckZ.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+mv offsetcheckZ.txt out/
+
+rm -rf otus.aln
+
 # ##################################################
 # # Step 8. Make OTU table
 # ##################################################
+#Note the maxrejects option for the otutab function slows down that function a lot bc it reduces heuristics
+#it reduces the probability of errors however. 
+#if speed becomes an issue for some reason, then reconsider this option.
 
 echo "About to cat this make take a minute, go get some coffee!"
 
 cat *stripped.fq > allstrip.fq
 
 #make 97% OTU table
-usearch -otutab allstrip.fq -otus otus97.fa -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
+usearch -otutab allstrip.fq -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
 
 #make ZOTU table
-usearch -otutab allstrip.fq -otus zotus.fa -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
+usearch -otutab allstrip.fq -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
 
 rm -rf allstrip.fq 
 
@@ -262,23 +284,33 @@ rm -rf allstrip.fq
 #could be an error with the otutable function, could be an offset read that didnt get caught
 #could also be a strand duplicate (reverse compliment)
 
-#if anything shows up then see the USEARCH help for tips on what to do. Probably not a huge deal
-#to deal with. Can just figure out what is going on and either remove the OTU, ignore the problem
-#or add counts for that OTU to a different OTU
 
 cut -f1 out/otuTable97otus.txt > included97s.txt
-grep "^>" otus97.fa | sed "-es/>//" > otuTitles.txt
-sort otuTitles.txt included97s.txt included97s.txt | uniq -u > missing_labels.txt
-usearch -fastx_getseqs zotus.fa -labels missing_labels.txt -fastaout out/missing97otus.fa
+grep "^>" otus97.fa | sed "-es/>//" > otuTitles97.txt
+sort otuTitles97.txt included97s.txt included97s.txt | uniq -u > missing_labels97.txt
+usearch -fastx_getseqs otus97.fa -labels missing_labels97.txt -fastaout out/missing97otus.fa
+
+sort missing_labels97.txt missing_labels97.txt seq_labels97.txt | uniq -u > notmissing_labels97.txt
+usearch -fastx_getseqs otus97.fa -labels notmissing_labels97.txt -fastaout notmissing.fa
+usearch -usearch_global missing97otus.fa -db notmissing.fa -strand both -id 0.97 -uc missnot97.uc -alnout missnot.aln
+
 
 cut -f1 out/otuTableZotus.txt > includedZotus.txt
-grep "^>" zotus.fa | sed "-es/>//" > otuTitles.txt
-sort otuTitles.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labels.txt
-usearch -fastx_getseqs zotus.fa -labels missing_labels.txt -fastaout out/missingZotus.fa
+grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
+sort otuTitlesZ.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labelsZ.txt
+usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missingZotus.fa
+
+sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissing_labelsZ.txt
+usearch -fastx_getseqs zotus.fa -labels notmissing_labelsZ.txt -fastaout notmissingZ.fa
+usearch -usearch_global missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missnotZ.uc -alnout missnot.aln
+
 
 rm -rf included*
 rm -rf otuTitles.txt
-rm -rf missing_labels.txt
+rm -rf missing_labelsZ.txt
+rm -rf missing_labels97.txt
+rm -rf notmissing_labels97.txt
+rm -rf notmissing_labelsZ.txt
 
 	# ##################################################
 	# # Deprecated. The following bit used to be neccessary, but is no longer needed
@@ -357,14 +389,7 @@ echo "Number of ZOTUS that passed QC" >> out/Processing_Summary.txt
 echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
 echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
 
-#number of reads that matched an OTU
-echo "Number of sequences that matched an 97% OTU" >> out/Processing_Summary.txt
-echo "Many of these will be non-target" >> out/Processing_Summary.txt
-echo `wc -l all_matches97.uc` >> out/Processing_Summary.txt
 
-echo "Number of sequences that matched an ZOTU" >> out/Processing_Summary.txt
-echo "Many of these will be non-target" >> out/Processing_Summary.txt
-echo `wc -l all_matchesZOTUs.uc` >> out/Processing_Summary.txt
 
 # ##################################################
 # # Step 10. Clean up files
@@ -376,10 +401,10 @@ echo `wc -l all_matchesZOTUs.uc` >> out/Processing_Summary.txt
  mkdir rawreads
  
  mv *fastq.gz rawreads
- mv all_matches* out/
  mv otus97.fa out/
  mv zotus.fa out/
- 
+ mv unmapped* out/
+
  rm -rf all_ucs*uc
  rm -rf uniqueSequences.fa
  rm -rf combined_filtered.fa
