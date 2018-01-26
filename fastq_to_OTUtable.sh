@@ -39,17 +39,17 @@
 #############################
 
 
-# #here the script removes any directories called "out" in the working directory
-# #and makes a new directory called out
+#here the script removes any directories called "out" in the working directory
+#and makes a new directory called out
 rm -rf out
 mkdir out
 touch out/Processing_Summary.txt
-# 
- gunzip *fastq.gz 
-# 
-# #######################################
-# ####Step 1. Examine quality of reads
-# #######################################
+
+gunzip *fastq.gz 
+
+#######################################
+####Step 1. Examine quality of reads
+#######################################
 
 #the main benefit to this step is to see how many reads get cut. 
 #really it can be skipped because of the filtering done later
@@ -98,12 +98,12 @@ else
 	echo "No samples had more than 2 expected errors. yay!" >> out/Processing_Summary.txt
 fi
 
-# #######################################
-# ####Step 2. Merge reads
-# #######################################
+#######################################
+####Step 2. Merge reads
+#######################################
 
-# Merge paired reads
-# Add sample name to read label (using the -relabel option). 
+#Merge paired reads
+#Add sample name to read label (using the -relabel option). 
 #Sample name is just the file name
 #this defaults to 10 threads, or number of cores, whichever is less
 #I doubt you will need to run more cores here very often as this is not slow
@@ -117,9 +117,9 @@ do
 
 done
 
-# #######################################
-# ####Step 3. Check reads are oriented the same way
-# #######################################
+#######################################
+####Step 3. Check reads are oriented the same way
+#######################################
 
 #note they should be oriented in same way from MiSeq, but worth doublechecking. This may need to be reconsidered
 #if we try other sequencing techniques for which I am unfamiliar
@@ -129,7 +129,7 @@ done
 
 cat `ls *merged.fq | head -n 5` > testFiles.fq
 
-usearch -orient testFiles.fq -db db/rdp_its_v2.fa -tabbedout orient_out.txt
+usearch -orient testFiles.fq -db db/rdp_16s_v16_sp.fa -tabbedout orient_out.txt
 
 #this should show most reads are + or ? (the latter being ones that didn't match anything in the db)
 
@@ -142,16 +142,16 @@ echo "$orient" >> out/Processing_Summary.txt
 rm -rf orient_out.txt
 rm -rf testFiles.fq
 
-# #######################################
-# ####Step 4. Remove primer binding region
-# #######################################
+#######################################
+####Step 4. Remove primer binding region
+#######################################
 
-# # Strip primers (V4F is 18, V4R is 20) (ITS1F is 22, ITS2R is 20)
-# # this will be important to doublecheck, as this can vary by primer pair
+# Strip primers (V4F is 18, V4R is 20) (ITS1F is 22, ITS2R is 20)
+# this will be important to doublecheck, as this can vary by primer pair
  
 for f in *merged.fq
 do
-	usearch -fastx_truncate $f -stripleft 22 -stripright 20 -fastqout ${f}stripped.fq
+	usearch -fastx_truncate $f -stripleft 18 -stripright 20 -fastqout ${f}stripped.fq
 done
 
 #Note we don't do any more length trimming because we are using merged reads
@@ -170,24 +170,24 @@ do
 	usearch -fastq_filter $f -fastq_maxee 1.0 -fastaout ${f}.filtered.fa
 done
 
-# #######################################
-# ####Step 6. Find unique read sequences and abundances
-# #######################################
+#######################################
+####Step 6. Find unique read sequences and abundances
+#######################################
 
 cat *filtered.fa> combined_filtered.fa
 
 usearch -fastx_uniques combined_filtered.fa -sizeout -fastaout uniqueSequences.fa
 
-# # #######################################
-# # ####Step 7. make OTUs and ZOTUs
-# # #######################################
+# #######################################
+# ####Step 7. make OTUs and ZOTUs
+# #######################################
 
 ## # Make 97% OTUs and filter chimeras
 #note we remove singletons here
 
 usearch -cluster_otus uniqueSequences.fa -otus otus970.fa -relabel Otu -minsize 2
 
-# # Denoise: predict biological sequences and filter chimeras
+# Denoise: predict biological sequences and filter chimeras
 #also called ZOTUs, or ESVs..exact sequence variants
 usearch -unoise3 uniqueSequences.fa -zotus zotuspre1.fa
 
@@ -260,9 +260,9 @@ mv offsetcheckZ.txt out/
 
 rm -rf otus.aln
 
-# ##################################################
-# # Step 8. Make OTU table
-# ##################################################
+##################################################
+# Step 8. Make OTU table
+##################################################
 #Note the maxrejects option for the otutab function slows down that function a lot bc it reduces heuristics
 #it reduces the probability of errors however. 
 #if speed becomes an issue for some reason, then reconsider this option.
@@ -271,11 +271,19 @@ echo "About to cat this make take a minute, go get some coffee!"
 
 cat *stripped.fq > allstrip.fq
 
+#convert to fasta so that -otutab works right
+usearch -fastq_filter allstrip.fq -fastaout allstrip.fa
+
 #make 97% OTU table
-usearch -otutab allstrip.fq -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
+usearch -otutab allstrip.fa -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
+
+#bug in old usearch needs this hack
+sed 's/Zotu/Otu/' zotus.fa > zotus2.fa
+rm -rf zotus.fa
+mv zotus2.fa zotus.fa
 
 #make ZOTU table
-usearch -otutab allstrip.fq -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
+usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
 
 rm -rf allstrip.fq 
 
@@ -284,16 +292,19 @@ rm -rf allstrip.fq
 #could be an error with the otutable function, could be an offset read that didnt get caught
 #could also be a strand duplicate (reverse compliment)
 
-
 cut -f1 out/otuTable97otus.txt > included97s.txt
 grep "^>" otus97.fa | sed "-es/>//" > otuTitles97.txt
 sort otuTitles97.txt included97s.txt included97s.txt | uniq -u > missing_labels97.txt
 usearch -fastx_getseqs otus97.fa -labels missing_labels97.txt -fastaout out/missing97otus.fa
 
-sort missing_labels97.txt missing_labels97.txt seq_labels97.txt | uniq -u > notmissing_labels97.txt
-usearch -fastx_getseqs otus97.fa -labels notmissing_labels97.txt -fastaout notmissing.fa
-usearch -usearch_global missing97otus.fa -db notmissing.fa -strand both -id 0.97 -uc missnot97.uc -alnout missnot.aln
+#here we find the notmissing OTUs then match the missing OTUs against them, this helps check for 
+#offsets or strand dupes
 
+sort missing_labels97.txt missing_labels97.txt otuTitles97.txt | uniq -u > notmissing_labels97.txt
+usearch -fastx_getseqs otus97.fa -labels notmissing_labels97.txt -fastaout notmissing.fa
+usearch -usearch_global out/missing97otus.fa -db notmissing.fa -strand both -id 0.97 -uc missingVsNotmissing97.uc -alnout missnot.aln
+
+#do above for zotus
 
 cut -f1 out/otuTableZotus.txt > includedZotus.txt
 grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
@@ -302,15 +313,18 @@ usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missin
 
 sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissing_labelsZ.txt
 usearch -fastx_getseqs zotus.fa -labels notmissing_labelsZ.txt -fastaout notmissingZ.fa
-usearch -usearch_global missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missnotZ.uc -alnout missnot.aln
+usearch -usearch_global out/missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missingVsNotmissingZ.uc -alnout missnot.aln
 
 
 rm -rf included*
-rm -rf otuTitles.txt
+rm -rf otuTitles*
 rm -rf missing_labelsZ.txt
 rm -rf missing_labels97.txt
 rm -rf notmissing_labels97.txt
 rm -rf notmissing_labelsZ.txt
+rm -rf notmissing*
+mv missingVs* out/
+rm -rf *aln
 
 	# ##################################################
 	# # Deprecated. The following bit used to be neccessary, but is no longer needed
@@ -370,11 +384,11 @@ echo `grep "@M0" *R2*.fastq | wc -l` >> out/Processing_Summary.txt
 
 #number of reads that merged successfully
 echo "Number of reads that merged successfully" >> out/Processing_Summary.txt
-echo `grep "@*fastq" *merged.fq | wc -l` >> out/Processing_Summary.txt
+echo `grep "^@" *merged.fq | wc -l` >> out/Processing_Summary.txt
 
 #number of reads that passed filtering
 echo "Number of merged reads that passed filtering" >> out/Processing_Summary.txt
-echo `grep ">" *filtered.fa | wc -l` >> out/Processing_Summary.txt
+echo `grep "$>" *combined.filtered.fa | wc -l` >> out/Processing_Summary.txt
 
 #number of unique sequences
 echo "Number of unique sequences" >> out/Processing_Summary.txt
@@ -391,9 +405,9 @@ echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
 
 
 
-# ##################################################
-# # Step 10. Clean up files
-# ##################################################
+# # ##################################################
+# # # Step 10. Clean up files
+# # ##################################################
 
  rm -rf *merged*
  
