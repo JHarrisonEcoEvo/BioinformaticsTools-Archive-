@@ -5,9 +5,12 @@
 
 #Usage bash mergeTaxonomyFiles.sh file1 file2
 
+#make sure input files are in same order. For some reason sintax doesn't do this
+sort -k 1 $1 > $1
+sort -k 1 $2 > $2
+
 #get the fourth field, which is the taxonomic assignment that was chosen at
 #>80% probability, based on kmer matches
-
 cut -f4 $1 > tmp.txt
 cut -f4 $2 > tmp2.txt
 
