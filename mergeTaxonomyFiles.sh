@@ -18,8 +18,9 @@ cut -f4 tmp2.txt > tax2.txt
 cut -f1 tmp.txt > namesFile1.txt
 cut -f1 tmp2.txt > namesFile2.txt
 
-paste namesFile1.txt namesFile2.txt tax*txt > combinedTaxonomy.txt
+paste namesFile1.txt namesFile2.txt tax.txt tax2.txt > combinedTaxonomy.txt
 
 rm -rf tmp*
-rm -rf tax*txt
+rm -rf tax1.txt
+rm -rf tax2.txt
 rm -rf namesFile*
