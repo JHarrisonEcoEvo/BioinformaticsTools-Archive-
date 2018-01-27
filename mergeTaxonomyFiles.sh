@@ -5,9 +5,17 @@
 
 #Usage bash mergeTaxonomyFiles.sh file1 file2
 
+#get the fourth field, which is the taxonomic assignment that was chosen at
+#>80% probability, based on kmer matches
+
 cut -f4 $1 > tmp.txt
 cut -f4 $2 > tmp2.txt
 
-paste tmp.txt tmp2.txt > combinedTaxonomy.txt
+#get OTU names, these should be the same, but will write both just in case
+cut -f1 $1 > namesFile1.txt
+cut -f1 $2 > namesFile2.txt
+
+paste namesFile1.txt namesFile2.txt tmp.txt tmp2.txt > combinedTaxonomy.txt
 
 rm -rf tmp*
+rm -rf namesFile*
