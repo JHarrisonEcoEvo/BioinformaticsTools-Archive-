@@ -1,0 +1,188 @@
+Otu1	Otu1		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu10	Otu10	f:Staphylococcaceae,g:Staphylococcus,s:Staphylococcus_argenteus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Staphylococcaceae,g:Staphylococcus,s:Staphylococcus_capitis_subsp._capitis
+Otu100	Otu100		d:Bacteria
+Otu101	Otu101		d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria
+Otu102	Otu102		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu103	Otu103	f:Bacillaceae,g:Bacillus,s:Bacillus_benzoevorans	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Bacillaceae_1,g:Bacillus,s:Bacillus_benzoevorans
+Otu104	Otu104	f:Carnobacteriaceae,g:Dolosigranulum,s:Dolosigranulum_pigrum	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Carnobacteriaceae,g:Dolosigranulum,s:Dolosigranulum_pigrum
+Otu105	Otu105		d:Bacteria,p:Candidatus_Saccharibacteria,g:Saccharibacteria_genera_incertae_sedis
+Otu106	Otu106	f:Porphyromonadaceae,g:Porphyromonas,s:Porphyromonas_catoniae	d:Bacteria,p:"Bacteroidetes",c:"Bacteroidia",o:"Bacteroidales",f:"Porphyromonadaceae",g:Porphyromonas,s:Porphyromonas_catoniae
+Otu107	Otu107	f:Veillonellaceae,g:Veillonella	d:Bacteria,p:Firmicutes,c:Negativicutes,o:Selenomonadales,f:Veillonellaceae,g:Veillonella
+Otu108	Otu108	f:Streptococcaceae,g:Streptococcus,s:Streptococcus_anginosus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Streptococcaceae,g:Streptococcus
+Otu109	Otu109	f:Dietziaceae,g:Dietzia,s:Dietzia_cinnamea	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Dietziaceae,g:Dietzia,s:Dietzia_papillomatosis
+Otu11	Otu11		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu110	Otu110	f:Moraxellaceae,g:Psychrobacter,s:Psychrobacter_cibarius	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Moraxellaceae,g:Psychrobacter
+Otu111	Otu111		d:Bacteria
+Otu112	Otu112	f:Eubacteriaceae,g:Eubacterium,s:Eubacterium_brachy	d:Bacteria,p:Firmicutes
+Otu113	Otu113	f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_lipophiloflavum	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu114	Otu114	f:Unclassified_Bacillales,g:Gemella	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Bacillales_Incertae_Sedis_XI,g:Gemella,s:Gemella_haemolysans
+Otu115	Otu115	f:Ktedonobacteraceae,g:Ktedonobacter,s:Ktedonobacter_racemifer	d:Bacteria,p:"Chloroflexi",c:Ktedonobacteria,o:Ktedonobacterales,f:Ktedonobacteraceae,g:Ktedonobacter,s:Ktedonobacter_racemifer
+Otu116	Otu116		d:Bacteria
+Otu117	Otu117	f:Unclassified_Clostridiales,g:Anaerococcus,s:Anaerococcus_octavius	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Anaerococcus,s:Anaerococcus_octavius
+Otu118	Otu118	f:Micrococcaceae,g:Kocuria	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Micrococcaceae,g:Kocuria
+Otu119	Otu119		d:Bacteria,p:"Armatimonadetes"
+Otu12	Otu12	f:Bacillaceae,g:Bacillus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Bacillaceae_1,g:Bacillus
+Otu120	Otu120	f:Phyllobacteriaceae,g:Mesorhizobium	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhizobiales,f:Phyllobacteriaceae,g:Mesorhizobium
+Otu121	Otu121	f:Comamonadaceae,g:Acidovorax,s:Acidovorax_defluvii	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Comamonadaceae,g:Acidovorax
+Otu122	Otu122		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast
+Otu123	Otu123	f:Moraxellaceae,g:Enhydrobacter,s:Enhydrobacter_aerosaccus	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Moraxellaceae,g:Enhydrobacter,s:Enhydrobacter_aerosaccus
+Otu124	Otu124		d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria
+Otu125	Otu125	f:Staphylococcaceae,g:Staphylococcus,s:Staphylococcus_fleurettii	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Staphylococcaceae,g:Staphylococcus
+Otu126	Otu126	f:Porphyromonadaceae	d:Bacteria,p:"Bacteroidetes",c:"Bacteroidia",o:"Bacteroidales",f:"Porphyromonadaceae"
+Otu127	Otu127	f:Carnobacteriaceae,g:Alloiococcus,s:Alloiococcus_otitis	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Carnobacteriaceae,g:Alloiococcus,s:Alloiococcus_otitis
+Otu128	Otu128	f:Leptotrichiaceae,g:Leptotrichia	d:Bacteria,p:"Fusobacteria",c:Fusobacteriia,o:"Fusobacteriales",f:"Leptotrichiaceae",g:Leptotrichia
+Otu129	Otu129		d:Bacteria
+Otu13	Otu13		d:Bacteria
+Otu130	Otu130		d:Bacteria
+Otu131	Otu131	f:Pasteurellaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pasteurellales,f:Pasteurellaceae,g:Haemophilus,s:Haemophilus_parainfluenzae
+Otu132	Otu132		d:Bacteria,p:"Bacteroidetes",c:"Bacteroidia",o:"Bacteroidales"
+Otu133	Otu133	f:Pseudomonadaceae,g:Pseudomonas,s:Pseudomonas_antarctica	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Pseudomonadaceae,g:Pseudomonas
+Otu134	Otu134	f:Actinomycetaceae,g:Actinomyces	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Actinomycetaceae,g:Actinomyces
+Otu135	Otu135	f:Actinomycetaceae,g:Actinomyces,s:Actinomyces_odontolyticus	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Actinomycetaceae,g:Actinomyces,s:Actinomyces_odontolyticus
+Otu136	Otu136	f:Veillonellaceae	d:Bacteria,p:Firmicutes,c:Negativicutes,o:Selenomonadales,f:Veillonellaceae,g:Selenomonas,s:Selenomonas_infelix
+Otu137	Otu137	f:Rikenellaceae,g:Alistipes	d:Bacteria,p:"Bacteroidetes",c:"Bacteroidia",o:"Bacteroidales",f:"Rikenellaceae",g:Alistipes,s:Alistipes_onderdonkii
+Otu138	Otu138	f:Campylobacteraceae,g:Campylobacter	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Gammaproteobacteria_incertae_sedis
+Otu139	Otu139	f:Dermabacteraceae,g:Dermabacter,s:Dermabacter_hominis	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Dermabacteraceae,g:Dermabacter,s:Dermabacter_hominis
+Otu14	Otu14	f:Lactobacillaceae,g:Lactobacillus,s:Lactobacillus_fermentum	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Lactobacillaceae,g:Lactobacillus,s:Lactobacillus_fermentum
+Otu140	Otu140	f:Neisseriaceae,g:Neisseria,s:Neisseria_cinerea	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Neisseriales,f:Neisseriaceae,g:Neisseria
+Otu141	Otu141	f:Sphingomonadaceae,g:Sphingomonas,s:Sphingomonas_alpina	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Sphingomonadales,f:Sphingomonadaceae,g:Sphingomonas,s:Sphingomonas_alpina
+Otu142	Otu142		d:Bacteria
+Otu143	Otu143	f:Streptococcaceae,g:Lactococcus,s:Lactococcus_lactis_subsp._cremoris	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Streptococcaceae,g:Lactococcus,s:Lactococcus_taiwanensis
+Otu144	Otu144	f:Leptotrichiaceae,g:Leptotrichia	d:Bacteria,p:"Fusobacteria",c:Fusobacteriia,o:"Fusobacteriales",f:"Leptotrichiaceae",g:Leptotrichia
+Otu145	Otu145	f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_kroppenstedtii	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_kroppenstedtii
+Otu146	Otu146	f:Unclassified_Alphaproteobacteria,g:Rhizomicrobium,s:Rhizomicrobium_electricum	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Alphaproteobacteria_incertae_sedis
+Otu147	Otu147		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu148	Otu148		d:Bacteria,p:"Bacteroidetes"
+Otu149	Otu149	f:Pasteurellaceae,g:Aggregatibacter,s:Aggregatibacter_aphrophilus	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pasteurellales,f:Pasteurellaceae
+Otu15	Otu15		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu150	Otu150		d:Bacteria
+Otu152	Otu152	f:Carnobacteriaceae,g:Granulicatella,s:Granulicatella_elegans	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Carnobacteriaceae,g:Granulicatella,s:Granulicatella_elegans
+Otu153	Otu153		d:Bacteria,p:"Fusobacteria",c:Fusobacteriia,o:"Fusobacteriales",f:"Fusobacteriaceae",g:Fusobacterium
+Otu155	Otu155	f:Peptoniphilaceae,g:Peptoniphilus,s:Peptoniphilus_gorbachii	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Peptoniphilaceae,g:Peptoniphilus,s:Peptoniphilus_harei
+Otu156	Otu156	f:Streptococcaceae,g:Streptococcus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Streptococcaceae,g:Streptococcus
+Otu157	Otu157	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu158	Otu158	f:Flavobacteriaceae,g:Cloacibacterium,s:Cloacibacterium_normanense	d:Bacteria,p:"Bacteroidetes",c:Flavobacteriia,o:"Flavobacteriales",f:Flavobacteriaceae,g:Cloacibacterium,s:Cloacibacterium_normanense
+Otu159	Otu159	f:Bradyrhizobiaceae	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhizobiales,f:Bradyrhizobiaceae
+Otu16	Otu16	f:Listeriaceae,g:Listeria,s:Listeria_innocua	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Listeriaceae,g:Listeria,s:Listeria_welshimeri
+Otu160	Otu160		d:Bacteria
+Otu161	Otu161	f:Aerococcaceae,g:Abiotrophia,s:Abiotrophia_defectiva	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Aerococcaceae,g:Abiotrophia,s:Abiotrophia_defectiva
+Otu162	Otu162	f:Pseudomonadaceae,g:Pseudomonas	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Pseudomonadaceae,g:Pseudomonas
+Otu163	Otu163		d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales
+Otu164	Otu164		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu165	Otu165		d:Bacteria,p:"Armatimonadetes",c:Armatimonadia,o:Armatimonadales,f:Armatimonadaceae,g:Armatimonas/Armatimonadetes_gp1
+Otu166	Otu166	f:Phyllobacteriaceae,g:Phyllobacterium,s:Phyllobacterium_bourgognense	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhizobiales,f:Phyllobacteriaceae,g:Phyllobacterium,s:Phyllobacterium_myrsinacearum
+Otu167	Otu167	f:Moraxellaceae,g:Acinetobacter,s:Acinetobacter_bereziniae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Moraxellaceae,g:Acinetobacter
+Otu168	Otu168	f:Akkermansiaceae,g:Akkermansia,s:Akkermansia_muciniphila	d:Bacteria,p:"Verrucomicrobia",c:Verrucomicrobiae,o:Verrucomicrobiales,f:Verrucomicrobiaceae,g:Akkermansia,s:Akkermansia_muciniphila
+Otu169	Otu169	f:Veillonellaceae,g:Veillonella	d:Bacteria,p:Firmicutes,c:Negativicutes,o:Selenomonadales,f:Veillonellaceae,g:Veillonella
+Otu17	Otu17		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu170	Otu170		d:Bacteria
+Otu171	Otu171	f:Veillonellaceae,g:Veillonella	d:Bacteria,p:Firmicutes,c:Negativicutes,o:Selenomonadales,f:Veillonellaceae,g:Veillonella
+Otu172	Otu172	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu173	Otu173	f:Unclassified_Clostridiales,g:Anaerococcus	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Anaerococcus
+Otu174	Otu174	f:Burkholderiaceae,g:Lautropia,s:Lautropia_mirabilis	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Lautropia,s:Lautropia_mirabilis
+Otu175	Otu175	f:Pasteurellaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pasteurellales,f:Pasteurellaceae
+Otu176	Otu176	f:Unclassified_Elusimicrobia,g:Pyrinomonas,s:Pyrinomonas_methylaliphatogenes	d:Bacteria,p:"Acidobacteria",c:Acidobacteria_Gp4,g:Gp4
+Otu177	Otu177	f:Burkholderiaceae,g:Cupriavidus	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Cupriavidus
+Otu178	Otu178	f:Bacteroidaceae,g:Bacteroides	d:Bacteria,p:"Bacteroidetes",c:"Bacteroidia",o:"Bacteroidales",f:Bacteroidaceae,g:Bacteroides
+Otu179	Otu179	f:Bradyrhizobiaceae,g:Afipia,s:Afipia_broomeae	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhizobiales,f:Bradyrhizobiaceae,g:Bradyrhizobium
+Otu18	Otu18		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu180	Otu180	f:Neisseriaceae,g:Neisseria,s:Neisseria_cinerea	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Neisseriales,f:Neisseriaceae,g:Neisseria
+Otu181	Otu181	f:Moraxellaceae,g:Acinetobacter,s:Acinetobacter_radioresistens	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Moraxellaceae,g:Acinetobacter
+Otu182	Otu182	f:Erythrobacteraceae	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Sphingomonadales,f:Erythrobacteraceae
+Otu183	Otu183	f:Neisseriaceae,g:Neisseria	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Neisseriales,f:Neisseriaceae,g:Morococcus
+Otu184	Otu184		d:Bacteria
+Otu185	Otu185		d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales
+Otu186	Otu186		d:Bacteria
+Otu187	Otu187	f:Unclassified_Clostridiales,g:Anaerococcus,s:Anaerococcus_octavius	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Anaerococcus,s:Anaerococcus_octavius
+Otu188	Otu188	f:Moraxellaceae,g:Acinetobacter,s:Acinetobacter_lwoffii	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Moraxellaceae,g:Acinetobacter
+Otu189	Otu189	f:Cellulomonadaceae,g:Cellulomonas,s:Cellulomonas_aerilata	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Cellulomonadaceae,g:Cellulomonas
+Otu19	Otu19		d:Bacteria
+Otu190	Otu190	f:Mycobacteriaceae,g:Mycobacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Mycobacteriaceae,g:Mycobacterium
+Otu2	Otu2		d:Bacteria
+Otu20	Otu20		d:Bacteria
+Otu21	Otu21	f:Enterococcaceae,g:Enterococcus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Enterococcaceae,g:Enterococcus
+Otu22	Otu22	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae,g:Salmonella
+Otu23	Otu23	f:Bacillaceae,g:Bacillus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales,f:Bacillaceae_1,g:Bacillus,s:Bacillus_siamensis
+Otu24	Otu24		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu25	Otu25		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu26	Otu26	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae,g:Escherichia/Shigella,s:Escherichia_fergusonii
+Otu27	Otu27		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu28	Otu28		d:Bacteria
+Otu29	Otu29		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu3	Otu3		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu30	Otu30		d:Bacteria
+Otu31	Otu31	f:Propionibacteriaceae,g:Propionibacterium,s:Propionibacterium_acnes	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Propionibacteriaceae,g:Propionibacterium,s:Propionibacterium_acnes
+Otu32	Otu32	f:Pseudomonadaceae,g:Pseudomonas,s:Pseudomonas_aeruginosa	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Pseudomonadaceae,g:Pseudomonas,s:Pseudomonas_aeruginosa
+Otu33	Otu33		d:Bacteria
+Otu34	Otu34		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu35	Otu35		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu36	Otu36	f:Alcaligenaceae,g:Achromobacter,s:Achromobacter_aegrifaciens	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Alcaligenaceae,g:Achromobacter,s:Achromobacter_anxifer
+Otu37	Otu37		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu38	Otu38		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu39	Otu39	f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_tuberculostearicum	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_tuberculostearicum
+Otu4	Otu4		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu40	Otu40		d:Bacteria
+Otu41	Otu41		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast
+Otu42	Otu42	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae
+Otu43	Otu43		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu44	Otu44		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu45	Otu45	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae,g:Salmonella
+Otu46	Otu46	f:Burkholderiaceae,g:Ralstonia,s:Ralstonia_pickettii	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Ralstonia,s:Ralstonia_pickettii
+Otu47	Otu47	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae,g:Escherichia/Shigella,s:Escherichia_fergusonii
+Otu48	Otu48	f:Burkholderiaceae,g:Burkholderia	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Burkholderia,s:Burkholderia_dilworthii
+Otu49	Otu49		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu5	Otu5		d:Bacteria
+Otu50	Otu50		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast
+Otu51	Otu51		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu52	Otu52		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu53	Otu53	f:Streptococcaceae,g:Streptococcus,s:Streptococcus_dentisani	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Streptococcaceae,g:Streptococcus,s:Streptococcus_dentisani
+Otu54	Otu54		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu55	Otu55	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_pilbarense
+Otu56	Otu56	f:Pseudomonadaceae,g:Pseudomonas,s:Pseudomonas_aeruginosa	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Pseudomonadales,f:Pseudomonadaceae,g:Pseudomonas,s:Pseudomonas_aeruginosa
+Otu57	Otu57	f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_accolens	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_accolens
+Otu58	Otu58		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu59	Otu59		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu6	Otu6		d:Bacteria
+Otu60	Otu60	f:Alcaligenaceae,g:Achromobacter,s:Achromobacter_aegrifaciens	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Alcaligenaceae,g:Achromobacter,s:Achromobacter_anxifer
+Otu61	Otu61		d:Bacteria
+Otu62	Otu62	f:Bradyrhizobiaceae,g:Bradyrhizobium,s:Bradyrhizobium_ganzhouense	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhizobiales,f:Bradyrhizobiaceae,g:Bradyrhizobium,s:Bradyrhizobium_manausense
+Otu63	Otu63		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu64	Otu64		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu65	Otu65	f:Caulobacteraceae,g:Phenylobacterium	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Caulobacterales,f:Caulobacteraceae,g:Phenylobacterium
+Otu66	Otu66	f:Intrasporangiaceae	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Intrasporangiaceae,g:Knoellia,s:Knoellia_sinensis
+Otu67	Otu67	f:Campylobacteraceae,g:Campylobacter,s:Campylobacter_sputorum_subsp._bubulus	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:Gammaproteobacteria_incertae_sedis
+Otu68	Otu68	f:Caulobacteraceae,g:Phenylobacterium	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Caulobacterales,f:Caulobacteraceae,g:Phenylobacterium
+Otu69	Otu69		d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales
+Otu7	Otu7		d:Bacteria
+Otu70	Otu70		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu71	Otu71	f:Enterobacteriaceae	d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae
+Otu72	Otu72		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu73	Otu73	f:Streptococcaceae,g:Streptococcus	d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales,f:Streptococcaceae,g:Streptococcus
+Otu74	Otu74	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu75	Otu75		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu76	Otu76		d:Bacteria
+Otu77	Otu77	f:Burkholderiaceae,g:Ralstonia,s:Ralstonia_pickettii	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Ralstonia,s:Ralstonia_pickettii
+Otu78	Otu78	f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_coyleae	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu79	Otu79	f:Sphingomonadaceae,g:Sphingomonas,s:Sphingomonas_alpina	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Sphingomonadales,f:Sphingomonadaceae,g:Sphingomonas,s:Sphingomonas_alpina
+Otu8	Otu8		d:Bacteria
+Otu80	Otu80		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu81	Otu81	f:Micrococcaceae,g:Micrococcus,s:Micrococcus_aloeverae	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Micrococcaceae,g:Micrococcus,s:Micrococcus_luteus
+Otu82	Otu82	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium
+Otu83	Otu83	f:Caulobacteraceae,g:Brevundimonas,s:Brevundimonas_nasdae	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Caulobacterales,f:Caulobacteraceae,g:Brevundimonas,s:Brevundimonas_nasdae
+Otu84	Otu84		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu85	Otu85	f:Burkholderiaceae,g:Burkholderia	d:Bacteria,p:"Proteobacteria",c:Betaproteobacteria,o:Burkholderiales,f:Burkholderiaceae,g:Burkholderia,s:Burkholderia_dilworthii
+Otu86	Otu86		d:Bacteria,p:"Proteobacteria",c:Gammaproteobacteria,o:"Enterobacteriales",f:Enterobacteriaceae,g:Buchnera
+Otu87	Otu87		d:Bacteria
+Otu88	Otu88	f:Unclassified_Rhodospirillales,g:Reyranella	d:Bacteria,p:"Proteobacteria",c:Alphaproteobacteria,o:Rhodospirillales,g:Reyranella
+Otu89	Otu89	f:Chitinophagaceae,g:Hydrotalea,s:Hydrotalea_flava	d:Bacteria,p:"Bacteroidetes",c:Sphingobacteriia,o:"Sphingobacteriales",f:Chitinophagaceae,g:Hydrotalea,s:Hydrotalea_flava
+Otu9	Otu9		d:Bacteria
+Otu90	Otu90	f:Unclassified_Clostridiales,g:Anaerococcus,s:Anaerococcus_octavius	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Anaerococcus,s:Anaerococcus_octavius
+Otu91	Otu91	f:Unclassified_Clostridiales,g:Finegoldia,s:Finegoldia_magna	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Finegoldia,s:Finegoldia_magna
+Otu92	Otu92	f:Corynebacteriaceae,g:Corynebacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Corynebacteriaceae,g:Corynebacterium,s:Corynebacterium_pseudodiphtheriticum
+Otu93	Otu93	f:Mycobacteriaceae,g:Mycobacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Mycobacteriaceae,g:Mycobacterium
+Otu94	Otu94	f:Unclassified_Clostridiales,g:Anaerococcus,s:Anaerococcus_octavius	d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales,f:Clostridiales_Incertae_Sedis_XI,g:Anaerococcus,s:Anaerococcus_octavius
+Otu95	Otu95		d:Bacteria,p:Cyanobacteria/Chloroplast,c:Chloroplast,f:Chloroplast,g:Streptophyta
+Otu96	Otu96	f:Mycobacteriaceae,g:Mycobacterium	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Mycobacteriaceae,g:Mycobacterium
+Otu97	Otu97	f:Leptotrichiaceae,g:Leptotrichia	d:Bacteria,p:"Fusobacteria",c:Fusobacteriia,o:"Fusobacteriales",f:"Leptotrichiaceae",g:Leptotrichia
+Otu98	Otu98	f:Propionibacteriaceae,g:Propionibacterium,s:Propionibacterium_granulosum	d:Bacteria,p:"Actinobacteria",c:Actinobacteria,o:Actinomycetales,f:Propionibacteriaceae,g:Propionibacterium,s:Propionibacterium_granulosum
+Otu99	Otu99	f:Veillonellaceae,g:Veillonella	d:Bacteria,p:Firmicutes,c:Negativicutes,o:Selenomonadales,f:Veillonellaceae,g:Veillonella,s:Veillonella_dispar
