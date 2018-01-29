@@ -36,7 +36,6 @@ main <- function() {
   #phylum often match nontarget taxa on NCBI...so I remove those too.
 
   fungiOnly= tax[tax[,4]!="d:Plantae",]
-  plants = tax[tax[,4]=="d:Plantae",]
 
   #this keeps any row that for either database there is more than 7 characters
   #in the cell
@@ -52,25 +51,29 @@ main <- function() {
   #if they show up as some other eukaryote then it may be worth scrubbing the data more
   ######################################################################################################
 
-  #overwrite our OTU table so that it includes only the taxon of interest
-  otus=otus[otus$X.OTU.ID %in% fungiOnly$V1,]
+  #make new OTU table so that it includes only the taxon of interest
+  otus2=otus[otus$X.OTU.ID %in% fungiOnly$V1,]
 
   #remove empty columns (no taxa of interest in a sample)
-  otus=otus[,which(colSums(otus[,2:length(otus)])!=0)]
+  otus2=otus2[,which(colSums(otus2[,2:length(otus2)])!=0)]
 
-  otus=t(otus)
-  colnames(otus)=as.character(otus[1,])
-  otus=otus[-1,]
-  row.names(otus)=gsub("X(\\d+\\.[a-h]\\d+).*","\\1",row.names(otus))
+  otus2=t(otus2)
+  colnames(otus2)=as.character(otus2[1,])
+  otus2=otus2[-1,]
+  row.names(otus2)=gsub("X(\\d+\\.[a-h]\\d+).*","\\1",row.names(otus2))
 
   #check to see if anything in the row.names is not in the key
-  which(!(row.names(otus) %in% sampNames$pl_well))
+  if(length(which(!(row.names(otus2) %in% sampNames$pl_well)))>1){
+    print("Error: some row names of the output otu file are not in the key")
+    print("This means that you have some unidentified samples or more likely")
+    print("something got mismatched somewhere. Run script piecemeal to see what happened!")
+  }
 
-  otus=data.frame(otus)
+  otus2=data.frame(otus2)
 
   #replace well based row names with the sample names
-  otus$samps=row.names(otus)
-  newotus=merge(otus, sampNames, by.x="samps", by.y="pl_well")
+  otus2$samps=row.names(otus2)
+  newotus=merge(otus2, sampNames, by.x="samps", by.y="pl_well")
 
   #make sure to edit the range in the call to the newotus object
   write.csv(data.frame(newotus$sampleName, newotus[,grep("Otu",names(newotus))]),file="cleanOTUtable_youshouldrename.csv", row.names = F)
