@@ -281,7 +281,7 @@ usearch -otutab allstrip.fa -otus otus97.fa -maxrejects 1000 -otutabout out/otuT
 #note the -i.bak  flag which makes edits inline
 
 sed 's/#//' out/otuTable97otus.txt > interim.txt
-mv interim.txt out/otuTable97otus.txt
+mv -f interim.txt out/otuTable97otus.txt
 rm -rf interim.txt
 
 #bug in old usearch needs this hack
@@ -294,7 +294,7 @@ usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTa
 
 #remove the hash from the first line. For some reason usearch puts this there
 sed 's/#//' out/otuTableZotus.txt > interim.txt
-mv interim.txt out/otuTableZotus.txt
+mv -f interim.txt out/otuTableZotus.txt
 rm -rf interim.txt
 
 rm -rf allstrip.fq
