@@ -73,16 +73,19 @@ main <- function() {
 
   #check to see if anything in the row.names is not in the key
   if(length(which(!(row.names(otus2) %in% sampNames$pl_well)))>1){
-    print("Error: some row names of the output otu file are not in the key")
-    print("This means that you have some unidentified samples or more likely")
-    print("something got mismatched somewhere. Run script piecemeal to see what happened!")
+    print("Error: the following row names of the output otu file are not in the key")
+    print("This means they had a non-parsable name and so the merge failed")
+    print("between the sample names and the well location. This is ok, just")
+    print("rename by hand, or tweak the call to gsub.")
+    print(row.names(otus2)[which(!(row.names(otus2) %in% sampNames$pl_well))])
+    print("These will be at the bottom of the OTU table")
   }
 
   otus2=data.frame(otus2)
 
   #replace well based row names with the sample names
   otus2$samps = row.names(otus2)
-  newotus = merge(otus2, sampNames, by.x="samps", by.y="pl_well")
+  newotus = merge(otus2, sampNames, by.x="samps", by.y="pl_well", all.x = TRUE)
   outputfile = data.frame(newotus$sampleName, newotus[,grep("Otu",names(newotus))])
 
   write.csv(outputfile,file="cleanOTUtable_youshouldrename.csv", row.names = F)
