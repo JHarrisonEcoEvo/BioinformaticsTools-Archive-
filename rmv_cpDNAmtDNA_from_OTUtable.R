@@ -44,7 +44,7 @@ main <- function() {
   #if they show up as some other eukaryote then it may be worth scrubbing the data more
   ######################################################################################################
 
-  #make new OTU table so that it includes only the taxon of interest
+  #make new OTU table so that it includes only the taxa of interest
   otus2=otus[otus$X.OTU.ID %in% fungiOnly$V1,]
 
   #remove empty columns (no taxa of interest in a sample)
@@ -67,8 +67,6 @@ main <- function() {
   #replace well based row names with the sample names
   otus2$samps = row.names(otus2)
   newotus = merge(otus2, sampNames, by.x="samps", by.y="pl_well")
-
-  #make sure to edit the range in the call to the newotus object
   outputfile = data.frame(newotus$sampleName, newotus[,grep("Otu",names(newotus))])
 
   write.csv(outputfile,file="cleanOTUtable_youshouldrename.csv", row.names = F)
