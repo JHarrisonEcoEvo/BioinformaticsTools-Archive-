@@ -27,3 +27,6 @@ uc_to_OTUtable.R - take a big uc file and turn it into an OTU table.
 Not really any reason to do this now that usearch has this function.
 
 useTax_to_cleanOTUtable.R
+
+Example_data/ - has some sample data files that may help you try out a script or
+tweak the script to your own purposes
