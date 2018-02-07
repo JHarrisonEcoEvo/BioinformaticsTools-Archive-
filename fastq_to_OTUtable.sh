@@ -296,6 +296,17 @@ usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTa
 sed 's/#//' out/otuTableZotus.txt > interim.txt
 sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTableZotus.txt
 
+#count the number of unassigned sequences and put this in the summary files
+echo "Number of reads that didn't get mapped when making the 97 OTU table " >> out/Processing_Summary.txt
+echo `eval grep "^>" unmapped97.fa | wc -l` >> out/Processing_Summary.txt
+
+echo "Number of reads that didn't get mapped when making the Z OTU table " >> out/Processing_Summary.txt
+echo `eval grep "^>" unmappedZOTUS.fa | wc -l` >> out/Processing_Summary.txt
+
+echo "If these numbers are low, then you some unmapped reads can probably be ignored" >> out/Processing_Summary.txt
+echo "However, if a lot of reads didn't map, then you will need to dig a bit to figure out why." >> out/Processing_Summary.txt
+echo "For guidance see the USEARCH website, which has some good tips. " >> out/Processing_Summary.txt
+
 rm -rf interim.txt
 rm -rf allstrip.fq
 
@@ -327,6 +338,11 @@ sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissi
 usearch -fastx_getseqs zotus.fa -labels notmissing_labelsZ.txt -fastaout notmissingZ.fa
 usearch -usearch_global out/missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missingVsNotmissingZ.uc -alnout missnot.aln
 
+unassignedreads=`wc -l missingVsNotmissing*.uc`
+
+if (( $(echo "$unassignedreads > 1" | bc -l) )); then
+  echo "Check out the missingVsNotmissing* files to see which OTUs were left out of the OTU table." >> out/Processing_Summary.txt
+fi
 
 rm -rf included*
 rm -rf otuTitles*
@@ -336,52 +352,8 @@ rm -rf notmissing_labels97.txt
 rm -rf notmissing_labelsZ.txt
 rm -rf notmissing*
 mv missingVs* out/
+mv unmapped* out/
 rm -rf *aln
-
-	# ##################################################
-	# # Deprecated. The following bit used to be neccessary, but is no longer needed
-	# # I am leaving it in case memory becomes a problem and this is needed again
-	# ##################################################
-	#
-	# #dont use filtered reads bc we can recover some info from them when using 97% match
-	#
-	# for f in *stripped.fq
-	# do
-	# 	usearch -usearch_global $f -db otus97.fa -id 0.97 -threads 32 -strand plus -uc ${f}_97.uc
-	# done
-	#
-	# cat *97.uc > all_ucs_97.uc
-	#
-	# #This removes sequences that didn't match anything
-	# perl rmv_matches.pl all_ucs_97.uc
-	#
-	# mv all_matches.uc all_matches97.uc
-	#
-	# #Do same thing for zotus
-	# #note search exact doesn't work for some reason...Not sure why
-	#
-	# for f in *merged.fq
-	# do
-	# 	usearch -usearch_global $f -db zotus.fa -id 1 -threads 32 -strand plus -uc ${f}_zotus.uc
-	# done
-	#
-	# cat *zotus.uc > all_ucs_zotus.uc
-	#
-	# #This removes sequences that didn't match anything
-	# perl rmv_matches.pl all_ucs_zotus.uc
-	#
-	# mv all_matches.uc all_matchesZOTUs.uc
-	#
-	# # ##################################################
-	# # # Step 9. make OTU table
-	# # ##################################################
-	#
-	# #this writes the OTU tables to the out/ dir
-	#
-	# Rscript uc_to_OTUtable.R all_matchesZOTUs.uc all_matches97.uc
-
-	#End deprecated section
-
 
  ##################################################
  # Step 9. Summary info calculation
@@ -429,7 +401,6 @@ echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
  mv *fastq.gz rawreads
  mv otus97.fa out/
  mv zotus.fa out/
- mv unmapped* out/
 
  rm -rf all_ucs*uc
  rm -rf uniqueSequences.fa
