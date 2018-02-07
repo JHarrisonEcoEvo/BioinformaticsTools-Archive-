@@ -15,9 +15,11 @@
 #IMPORTANT: This script has very limited utility and very likely won't work for
 #you unless you tweak it a bit, or are using my pipeline, so carefully read it!
 
-#For examples of input data see the dir Example_data/ in the git repo with files named as below
+#For examples of input data see the dir Example_data/ in the git repo
 
-#Usage: Rscript useTax_to_cleanOTUtable.R taxonomyFileExample.txt OTUtableExample.txt Well_to_sampleKeyExample.csv
+#Usage: Rscript useTax_to_cleanOTUtable.R taxonomyFileExample.txt OTUtableExample.txt Well_to_sampleKeyExample.csv clean
+#where clean is either "yes" or "no" and determines if you want
+#taxa removed that were not assigned to a phylum
 
 main <- function() {
   inargs <- commandArgs(trailingOnly = TRUE)
@@ -28,8 +30,11 @@ main <- function() {
   otus=read.delim(file=inargs[2], header=T)
   sampNames=read.csv(file=inargs[3])
   sampNames$pl_well=paste(sampNames$plate, sampNames$well, sep=".")
+  clean=inargs[4]
 
   #now we need to pick which OTUs to keep
+  #note the use of fungi in the object names below doesn't matter. This
+  #script will work for bacteria taxonomy files too.
   #I am first removing any OTUs that the UNITE database said were plants.
   #then I will subset the data to just keep only those OTUs that one or the other database
   #had >80% confidence in placement to phylum. In previous work I have found that <80% placement to
@@ -38,6 +43,17 @@ main <- function() {
   fungiOnly= tax[tax[,4]!="d:Plantae",]
   fungiOnly= tax[-(grep("Chloroplast", tax[,4])),]
 
+  #this keeps any row that for either database there is more than 10 characters
+  #describing the taxonomic hypothesis.
+  #this gets rid of anything that was not identified to phylum by
+  #one or the other db.
+  #IMPORTANT: this may very well get rid of target taxa if you are working in
+  #a remote system. Use with caution.
+
+  if(clean=="yes"){
+    fungiOnly = fungiOnly[which(nchar(as.character(fungiOnly[,3])) > 10 | nchar(as.character(fungiOnly[,4])) > 10),]
+  }
+
   ######################################################################################################
   #NOTE: I strongly recommend doing some spot checks of the OTUs that made it through. Find some that were
   #not id'd as fungi by both databases and go to the NCBI web interface and paste them in there.
@@ -45,7 +61,7 @@ main <- function() {
   ######################################################################################################
 
   #make new OTU table so that it includes only the taxa of interest
-  otus2=otus[otus$X.OTU.ID %in% fungiOnly$V1,]
+  otus2=otus[otus$OTU_ID %in% fungiOnly$V1,]
 
   #remove empty columns (no taxa of interest in a sample)
   otus2=otus2[,which(colSums(otus2[,2:length(otus2)])!=0)]
