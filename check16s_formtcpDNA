@@ -1,0 +1,45 @@
+#!/bin/bash
+#J. G. Harrison
+
+#This script compares your OTU fastas against reference databases to see
+#what OTUs may be contaminants. You have to have Vsearch. I am using Vsearch
+#because it is 64 bit and the free version of USEARCH is only 32 bit.
+#Of course, you also have to have reference databases with paths as below.
+
+#Usage
+#check16s_formtcpDNA yourOTUfasta
+
+#output will be prefixed with "hits" and suffixed with the database name.
+#output will go into a dir called possible_mt_cpDNA/
+
+mkdir possible_mt_cpDNA/
+
+#Run Vsearch to check our OTU fasta files against the reference databases.
+
+vsearch --usearch_global $1 --db ~/ref_db/MIDORI_lrRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_lr.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/MIDORI_srRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_sr.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomeMT.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.rna.fna --id 0.97 --blast6out hits_${1}_refseqRnaMT.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/plastid.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomePlastid.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/plastid.2.rna.fna --id 0.97 --blast6out hits_${1}_refseqPlastidRNA.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/prns.CDS.fasta --id 0.97 --blast6out hits_${1}_MitoFun_PRNS_CDS.b6
+
+vsearch --usearch_global $1 --db ~/ref_db/rns.GENE.fasta --id 0.97 --blast6out hits_${1}MitoFun_PRNS_Gene.b6
+
+cat hits* > allhits.b6
+
+#make a output file of just OTU names for easy cutting of the OTU table
+
+cut -f 1 allhits.b6 > otus_that_are_mtcpDNA.txt
+
+mv otus_that_are_mtcpDNA.txt possible_mt_cpDNA/
+
+mv hits* possible_mt_cpDNA/
+
+mv allhits.b6 possible_mt_cpDNA/
