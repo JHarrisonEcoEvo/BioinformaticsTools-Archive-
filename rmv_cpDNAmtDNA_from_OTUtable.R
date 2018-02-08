@@ -48,13 +48,13 @@ main <- function() {
   print(paste("Started with ", length(tax[,1]), " taxa", sep=""))
 
   fungiOnly= tax[tax[,4]!="d:Plantae",]
-  print(paste("Now have ", length(tax[,1]), " taxa after removing plant otus", sep=""))
+  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing plant otus", sep=""))
 
-  fungiOnly= tax[-(grep("Chloroplast", tax[,4])),]
-  print(paste("Now have ", length(tax[,1]), " taxa after removing cp otus", sep=""))
+  fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,4])),]
+  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus", sep=""))
 
-  fungiOnly= tax[tax[,1] != unique(toRmv[,1]),]
-  print(paste("Now have ", length(tax[,1]), " taxa after removing input cp and mt OTUs", sep=""))
+  fungiOnly = fungiOnly[fungiOnly[,1] != as.character(unique(toRmv[,1])),]
+  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing input cp and mt OTUs", sep=""))
 
   #this keeps any row that for either database there is more than 10 characters
   #describing the taxonomic hypothesis.
