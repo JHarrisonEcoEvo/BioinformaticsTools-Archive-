@@ -17,9 +17,12 @@
 
 #For examples of input data see the dir Example_data/ in the git repo
 
-#Usage: Rscript useTax_to_cleanOTUtable.R taxonomyFileExample.txt OTUtableExample.txt Well_to_sampleKeyExample.csv clean
+#Usage: Rscript useTax_to_cleanOTUtable.R combinedTaxonomyfile.txt OTUtableExample.txt Well_to_sampleKeyExample.csv clean otusToRemove.txt
+
 #where clean is either "yes" or "no" and determines if you want
 #taxa removed that were not assigned to a phylum
+#otusToRemove.txt - is a txt file with otus that were identified as mt or cpdna
+#that you want removed (this is the output of the check16s* script).
 
 main <- function() {
   inargs <- commandArgs(trailingOnly = TRUE)
@@ -31,6 +34,7 @@ main <- function() {
   sampNames=read.csv(file=inargs[3])
   sampNames$pl_well=paste(sampNames$plate, sampNames$well, sep=".")
   clean=inargs[4]
+  toRmv=read.delim(inargs[5], header=F)
 
   #now we need to pick which OTUs to keep
   #note the use of fungi in the object names below doesn't matter. This
@@ -40,8 +44,17 @@ main <- function() {
   #had >80% confidence in placement to phylum. In previous work I have found that <80% placement to
   #phylum often match nontarget taxa on NCBI...so I remove those too.
 
+#note these are just operating on the 4th field because the UNITE database out has a different format
+  print(paste("Started with ", length(tax[,1]), " taxa", sep=""))
+
   fungiOnly= tax[tax[,4]!="d:Plantae",]
+  print(paste("Now have ", length(tax[,1]), " taxa after removing plant otus", sep=""))
+
   fungiOnly= tax[-(grep("Chloroplast", tax[,4])),]
+  print(paste("Now have ", length(tax[,1]), " taxa after removing cp otus", sep=""))
+
+  fungiOnly= tax[tax[,1] != toRmv[,1]]
+  print(paste("Now have ", length(tax[,1]), " taxa after removing input cp and mt OTUs", sep=""))
 
   #this keeps any row that for either database there is more than 10 characters
   #describing the taxonomic hypothesis.
