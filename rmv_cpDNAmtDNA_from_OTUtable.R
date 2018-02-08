@@ -53,7 +53,7 @@ main <- function() {
   fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,4])),]
   print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus", sep=""))
 
-  fungiOnly = fungiOnly[fungiOnly[,1] != as.character(unique(toRmv[,1])),]
+  fungiOnly = fungiOnly[-which(fungiOnly[,1] %in% as.character(unique(toRmv[,1]))),]
   print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing input cp and mt OTUs", sep=""))
 
   #this keeps any row that for either database there is more than 10 characters
