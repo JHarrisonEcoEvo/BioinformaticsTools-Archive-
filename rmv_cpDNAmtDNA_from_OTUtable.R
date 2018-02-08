@@ -53,7 +53,7 @@ main <- function() {
   fungiOnly= tax[-(grep("Chloroplast", tax[,4])),]
   print(paste("Now have ", length(tax[,1]), " taxa after removing cp otus", sep=""))
 
-  fungiOnly= tax[tax[,1] != toRmv[,1]]
+  fungiOnly= tax[tax[,1] != unique(toRmv[,1]),]
   print(paste("Now have ", length(tax[,1]), " taxa after removing input cp and mt OTUs", sep=""))
 
   #this keeps any row that for either database there is more than 10 characters
