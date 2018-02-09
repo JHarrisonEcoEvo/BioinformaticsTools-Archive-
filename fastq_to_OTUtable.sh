@@ -275,7 +275,7 @@ cat *stripped.fq > allstrip.fq
 usearch -fastq_filter allstrip.fq -fastaout allstrip.fa
 
 #make 97% OTU table
-usearch -otutab allstrip.fa -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus_raw.txt -notmatched unmapped97.fa
+usearch -otutab allstrip.fa -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
 
 #remove the hash from the first line. For some reason usearch puts this there
 #note the -i.bak  flag which makes edits inline
@@ -290,7 +290,7 @@ rm -rf zotus.fa
 mv zotus2.fa zotus.fa
 
 #make ZOTU table
-usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus_raw.txt -notmatched unmappedZOTUS.fa
+usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
 
 #remove the hash from the first line. For some reason usearch puts this there
 sed 's/#//' out/otuTableZotus.txt > interim.txt
