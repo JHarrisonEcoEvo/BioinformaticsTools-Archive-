@@ -247,8 +247,8 @@ rm -rf otus970.fa
 #check for offset sequences
 usearch -cluster_fast otus97.fa -id 0.97 -strand both -alnout otus.aln -show_termgaps -userout offsetcheck97.txt -userfields query+target+qstrand+qlo+qhi+tlo+thi
 echo "If there is anything here then you should check the file offsetcheck97.txt and see which reads may be messed up" >> out/Processing_Summary.txt
-echo `eval cut -f4 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
-echo `eval cut -f6 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+echo `cut -f4 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
+echo `cut -f6 offsetcheck97.txt | grep -v "^1$"` >> out/Processing_Summary.txt
 mv offsetcheck97.txt out/
 
 #do for zotus
@@ -294,14 +294,14 @@ usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTa
 
 #remove the hash from the first line. For some reason usearch puts this there
 sed 's/#//' out/otuTableZotus.txt > interim.txt
-sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTableZotus.txt
+# sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTableZotus.txt
 
 #count the number of unassigned sequences and put this in the summary files
 echo "Number of reads that didn't get mapped when making the 97 OTU table " >> out/Processing_Summary.txt
-echo `eval grep "^>" unmapped97.fa | wc -l` >> out/Processing_Summary.txt
+echo `grep "^>" unmapped97.fa | wc -l` >> out/Processing_Summary.txt
 
 echo "Number of reads that didn't get mapped when making the Z OTU table " >> out/Processing_Summary.txt
-echo `eval grep "^>" unmappedZOTUS.fa | wc -l` >> out/Processing_Summary.txt
+echo `grep "^>" unmappedZOTUS.fa | wc -l` >> out/Processing_Summary.txt
 
 echo "If these numbers are low, then you some unmapped reads can probably be ignored" >> out/Processing_Summary.txt
 echo "However, if a lot of reads didn't map, then you will need to dig a bit to figure out why." >> out/Processing_Summary.txt
@@ -318,25 +318,36 @@ rm -rf allstrip.fq
 cut -f1 out/otuTable97otus.txt > included97s.txt
 grep "^>" otus97.fa | sed "-es/>//" > otuTitles97.txt
 sort otuTitles97.txt included97s.txt included97s.txt | uniq -u > missing_labels97.txt
-usearch -fastx_getseqs otus97.fa -labels missing_labels97.txt -fastaout out/missing97otus.fa
+
+echo "If you get some `no such file` errors here, just ignore them. This means
+there were no missing OTUs in the OTUtable so you are good."
+
+nummiss=`wc -l out/missing97otus.fa`
+
+if (( $(echo "$nummiss > 1" | bc -l) )); then
+  usearch -fastx_getseqs otus97.fa -labels missing_labels97.txt -fastaout out/missing97otus.fa
 
 #here we find the notmissing OTUs then match the missing OTUs against them, this helps check for
 #offsets or strand dupes
-
 sort missing_labels97.txt missing_labels97.txt otuTitles97.txt | uniq -u > notmissing_labels97.txt
 usearch -fastx_getseqs otus97.fa -labels notmissing_labels97.txt -fastaout notmissing.fa
 usearch -usearch_global out/missing97otus.fa -db notmissing.fa -strand both -id 0.97 -uc missingVsNotmissing97.uc -alnout missnot.aln
+fi
 
 #do above for zotus
+nummiss=`wc -l out/missingZotus.fa`
 
-cut -f1 out/otuTableZotus.txt > includedZotus.txt
-grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
-sort otuTitlesZ.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labelsZ.txt
-usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missingZotus.fa
 
-sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissing_labelsZ.txt
-usearch -fastx_getseqs zotus.fa -labels notmissing_labelsZ.txt -fastaout notmissingZ.fa
-usearch -usearch_global out/missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missingVsNotmissingZ.uc -alnout missnot.aln
+  cut -f1 out/otuTableZotus.txt > includedZotus.txt
+  grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
+  sort otuTitlesZ.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labelsZ.txt
+  usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missingZotus.fa
+
+if (( $(echo "$nummiss > 1" | bc -l) )); then
+  sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissing_labelsZ.txt
+  usearch -fastx_getseqs zotus.fa -labels notmissing_labelsZ.txt -fastaout notmissingZ.fa
+  usearch -usearch_global out/missingZotus.fa -db notmissingZ.fa -strand both -id 0.97 -uc missingVsNotmissingZ.uc -alnout missnot.aln
+fi
 
 unassignedreads=`wc -l missingVsNotmissing*.uc`
 
@@ -344,16 +355,16 @@ if (( $(echo "$unassignedreads > 1" | bc -l) )); then
   echo "Check out the missingVsNotmissing* files to see which OTUs were left out of the OTU table." >> out/Processing_Summary.txt
 fi
 
-rm -rf included*
-rm -rf otuTitles*
-rm -rf missing_labelsZ.txt
-rm -rf missing_labels97.txt
-rm -rf notmissing_labels97.txt
-rm -rf notmissing_labelsZ.txt
-rm -rf notmissing*
+rm -f included*
+rm -f otuTitles*
+rm -f missing_labelsZ.txt
+rm -f missing_labels97.txt
+rm -f notmissing_labels97.txt
+rm -f notmissing_labelsZ.txt
+rm -f notmissing*
 mv missingVs* out/
 mv unmapped* out/
-rm -rf *aln
+rm -f *aln
 
  ##################################################
  # Step 9. Summary info calculation
