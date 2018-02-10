@@ -383,7 +383,7 @@ echo `grep "^@" *merged.fq | wc -l` >> out/Processing_Summary.txt
 
 #number of reads that passed filtering
 echo "Number of merged reads that passed filtering" >> out/Processing_Summary.txt
-echo `grep "$>" *combined.filtered.fa | wc -l` >> out/Processing_Summary.txt
+echo `grep "$>" combined.filtered.fa | wc -l` >> out/Processing_Summary.txt
 
 #number of unique sequences
 echo "Number of unique sequences" >> out/Processing_Summary.txt
