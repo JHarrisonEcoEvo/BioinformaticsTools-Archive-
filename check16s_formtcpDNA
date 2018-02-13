@@ -16,16 +16,16 @@
 mkdir possible_mt_cpDNA/
 
 #the MIDORI databases (see Machida et al. 2017). These are from various metazoa
-#vsearch --usearch_global $1 --db ~/ref_db/MIDORI_lrRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_lr.b6
-#vsearch --usearch_global $1 --db ~/ref_db/MIDORI_srRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_sr.b6
+vsearch --usearch_global $1 --db ~/ref_db/MIDORI_lrRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_lr.b6
+vsearch --usearch_global $1 --db ~/ref_db/MIDORI_srRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_sr.b6
 
 #Refseq mitochondria genomes and rRNA
-#vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomeMT.b6
-#vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.rna.fna --id 0.97 --blast6out hits_${1}_refseqRnaMT.b6
+vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomeMT.b6
+vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.rna.fna --id 0.97 --blast6out hits_${1}_refseqRnaMT.b6
 
 #Refseq plastid genomes and rRNA
-#vsearch --usearch_global $1 --db ~/ref_db/plastid.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomePlastid.b6
-#vsearch --usearch_global $1 --db ~/ref_db/plastid.2.rna.fna --id 0.97 --blast6out hits_${1}_refseqPlastidRNA.b6
+vsearch --usearch_global $1 --db ~/ref_db/plastid.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomePlastid.b6
+vsearch --usearch_global $1 --db ~/ref_db/plastid.2.rna.fna --id 0.97 --blast6out hits_${1}_refseqPlastidRNA.b6
 
 #MitoFun mitochondria. See "http://mitofun.biol.uoa.gr/"
 vsearch --usearch_global $1 --db ~/ref_db/rns.CDS.fasta --id 0.97 --blast6out hits_${1}_MitoFun_PRNS_CDS.b6
