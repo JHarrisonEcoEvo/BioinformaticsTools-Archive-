@@ -34,7 +34,10 @@ main <- function() {
   sampNames=read.csv(file=inargs[3])
   sampNames$pl_well=paste(sampNames$plate, sampNames$well, sep=".")
   clean=inargs[4]
-  toRmv=read.delim(inargs[5], header=F)
+
+  if(length(inargs)>4){
+    toRmv=read.delim(inargs[5], header=F)
+  }
 
   #now we need to pick which OTUs to keep
   #note the use of fungi in the object names below doesn't matter. This
@@ -44,17 +47,20 @@ main <- function() {
   #had >80% confidence in placement to phylum. In previous work I have found that <80% placement to
   #phylum often match nontarget taxa on NCBI...so I remove those too.
 
-#note these are just operating on the 4th field because the UNITE database out has a different format
+  #note these are just operating on the 4th field because the UNITE database out has a different format
   print(paste("Started with ", length(tax[,1]), " taxa", sep=""))
 
   fungiOnly= tax[tax[,4]!="d:Plantae",]
   print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing plant otus", sep=""))
 
-  fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,4])),]
-  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus", sep=""))
-
-  fungiOnly = fungiOnly[-which(fungiOnly[,1] %in% as.character(unique(toRmv[,1]))),]
-  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing input cp and mt OTUs", sep=""))
+  if(length(grep("Chloroplast", fungiOnly[,4]))>0){
+    fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,4])),]
+    print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus", sep=""))
+  }
+  if(length(inargs)>4){
+    fungiOnly = fungiOnly[-which(fungiOnly[,1] %in% as.character(unique(toRmv[,1]))),]
+    print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing input cp and mt OTUs", sep=""))
+  }
 
   #this keeps any row that for either database there is more than 10 characters
   #describing the taxonomic hypothesis.
@@ -74,10 +80,11 @@ main <- function() {
   ######################################################################################################
 
   #make new OTU table so that it includes only the taxa of interest
-  otus2=otus[otus$OTU_ID %in% fungiOnly$V1,]
+  otus2=otus[otus$OTU_ID %in% fungiOnly[,1],]
 
   #remove empty columns (no taxa of interest in a sample)
   otus2=otus2[,which(colSums(otus2[,2:length(otus2)])!=0)]
+
 
   otus2=t(otus2)
   colnames(otus2)=as.character(otus2[1,])
