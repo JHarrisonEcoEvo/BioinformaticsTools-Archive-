@@ -24,3 +24,4 @@ rm -rf tmp*
 rm -rf tax1.txt
 rm -rf tax2.txt
 rm -rf namesFile*
+rm -f tax.txt
