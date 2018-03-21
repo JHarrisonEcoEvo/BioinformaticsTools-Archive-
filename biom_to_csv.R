@@ -30,6 +30,7 @@ process <- function(filename) {
   x <- biom_data(datbiom)
   yuck <- as.matrix(x)
   write.csv(yuck, file=paste(filename, ".csv", sep=""))
+  write.csv(observation_metadata(datbiom), file=paste(filename, "taxonomy.csv", sep=""))
 }
 
 main()  
