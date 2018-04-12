@@ -45,6 +45,8 @@ rm -rf out
 mkdir out
 touch out/Processing_Summary.txt
 
+#vsearch can handle zipped files, but usearch can't
+#in a real cursory test usearch did a better job merging, so unzip
 gunzip *fastq.gz
 
 #######################################
@@ -52,51 +54,51 @@ gunzip *fastq.gz
 #######################################
 
 #the main benefit to this step is to see how many reads get cut.
-#really it can be skipped because of the filtering done later
-
-mkdir fastq_info
-
-for fq in *fastq
-do
-  usearch -fastx_info $fq -output fastq_info/${fq}info
-done
-
-#make a summary txt file that has number of expected errors per sample
-grep "^EE" fastq_info/* > fastq_info/expected_error_summary.txt
-
-#cut out just the floating point estimates of expected errors
-grep -o "EE mean [0-9].[0-9]" fastq_info/expected_error_summary.txt | cut -d " " -f3 > EE.txt
-
-counter=0
-#initialize array of bad samples
-badsamples[0]=""
-while read p; do
-	counter=$((counter+1))
-	if (( $(echo "$p > 2" | bc -l) )); then
-	 	toadd=`echo $counter`
-	 	 badsamples+=(`echo $counter`)
-	 	 echo $toadd
-	 fi
-done < EE.txt #note the strange way to pass an in file here
-
-rm EE.txt
-
-#get the length of the array. if more than one then we have a problem sample
-numbad=`echo ${#distro[@]}`
-
-#if problem samples are present, then tell us which those are
-#if [ "$numbad > 1" ]; then
-if (( $(echo "$numbad > 1" | bc -l) )); then
-	echo "The following samples have more than two expected errors, perhaps keep an eye on them:" >> out/Processing_Summary.txt
-
-	#for each element in this array do...
-	for i in `echo "${badsamples[@]}"`
-	do
-		sed -n ${i}p fastq_info/expected_error_summary.txt >> out/Processing_Summary.txt
-	done
-else
-	echo "No samples had more than 2 expected errors. yay!" >> out/Processing_Summary.txt
-fi
+#it can be skipped because of the filtering done later
+#
+# mkdir fastq_info
+#
+# for fq in *fastq
+# do
+#   usearch -fastx_info $fq -output fastq_info/${fq}info
+# done
+#
+# #make a summary txt file that has number of expected errors per sample
+# grep "^EE" fastq_info/* > fastq_info/expected_error_summary.txt
+#
+# #cut out just the floating point estimates of expected errors
+# grep -o "EE mean [0-9].[0-9]" fastq_info/expected_error_summary.txt | cut -d " " -f3 > EE.txt
+#
+# counter=0
+# #initialize array of bad samples
+# badsamples[0]=""
+# while read p; do
+# 	counter=$((counter+1))
+# 	if (( $(echo "$p > 2" | bc -l) )); then
+# 	 	toadd=`echo $counter`
+# 	 	 badsamples+=(`echo $counter`)
+# 	 	 echo $toadd
+# 	 fi
+# done < EE.txt #note the strange way to pass an in file here
+#
+# rm EE.txt
+#
+# #get the length of the array. if more than one then we have a problem sample
+# numbad=`echo ${#distro[@]}`
+#
+# #if problem samples are present, then tell us which those are
+# #if [ "$numbad > 1" ]; then
+# if (( $(echo "$numbad > 1" | bc -l) )); then
+# 	echo "The following samples have more than two expected errors, perhaps keep an eye on them:" >> out/Processing_Summary.txt
+#
+# 	#for each element in this array do...
+# 	for i in `echo "${badsamples[@]}"`
+# 	do
+# 		sed -n ${i}p fastq_info/expected_error_summary.txt >> out/Processing_Summary.txt
+# 	done
+# else
+# 	echo "No samples had more than 2 expected errors. yay!" >> out/Processing_Summary.txt
+# fi
 
 #######################################
 ####Step 2. Merge reads
@@ -113,7 +115,12 @@ do
 	fname=$(basename $f)
 	fname2=${fname/R1/R2}
 
-	usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -sample $fname
+usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.mergedUs.fq --fastq_minovlen 10 --fastq_maxdiffs 5 --sample $fname
+	#vsearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq --fastq_maxns 10 --fastq_minovlen 10 --fastq_maxdiffs 5 --label_suffix $fname
+  #--fastq_maxns means number of allowable NAs
+  #--fastq_minovlen minimum overlap
+  #--fastq_maxdiffs max number of differences in overlap region
+  #--label_suffix add file name to header
 
 done
 
@@ -147,11 +154,12 @@ rm -rf testFiles.fq
 #######################################
 
 # Strip primers (V4F is 18, V4R is 20) (ITS1F is 22, ITS2R is 20)
-# this will be important to doublecheck, as this can vary by primer pair
+# this can vary by primer pair
+# this step is not neccesary imo when using zotus/esvs/asvs
 
 for f in *merged.fq
 do
-	usearch -fastx_truncate $f -stripleft 22 -stripright 20 -fastqout ${f}stripped.fq
+	usearch -fastx_truncate $f -stripleft 0 -stripright 0 -fastqout ${f}stripped.fq
 done
 
 #Note we don't do any more length trimming because we are using merged reads
@@ -176,7 +184,7 @@ done
 
 cat *filtered.fa> combined_filtered.fa
 
-usearch -fastx_uniques combined_filtered.fa -sizeout -fastaout uniqueSequences.fa
+ vsearch --derep_fulllength combined_filtered.fa --output uniqueSequences.fa --sizeout
 
 # #######################################
 # ####Step 7. make OTUs and ZOTUs
@@ -272,10 +280,10 @@ echo "About to cat this make take a minute, go get some coffee!"
 cat *stripped.fq > allstrip.fq
 
 #convert to fasta so that -otutab works right
-usearch -fastq_filter allstrip.fq -fastaout allstrip.fa
+vsearch -fastq_filter allstrip.fq -fastaout allstrip.fa
 
 #make 97% OTU table
-usearch -otutab allstrip.fa -otus otus97.fa -maxrejects 1000 -otutabout out/otuTable97otus.txt -notmatched unmapped97.fa
+vsearch -usearch_global allstrip.fa -db otus97.fa -otutabout out/otuTable97otus.txt --id 0.98
 
 #remove the hash from the first line. For some reason usearch puts this there
 #note the -i.bak  flag which makes edits inline
@@ -284,27 +292,52 @@ sed 's/#//' out/otuTable97otus.txt > interim.txt
 sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTable97otus.txt
 rm -rf interim.txt
 
-#bug in old usearch needs this hack
-sed 's/Zotu/Otu/' zotus.fa > zotus2.fa
-rm -rf zotus.fa
-mv zotus2.fa zotus.fa
-
 #make ZOTU table
-usearch -otutab allstrip.fa -otus zotus.fa -maxrejects 1000 -otutabout out/otuTableZotus.txt -notmatched unmappedZOTUS.fa
+vsearch -usearch_global allstrip.fa -db zotus.fa -otutabout out/otuTableZotus.txt --id 0.99
 
 #remove the hash from the first line. For some reason usearch puts this there
 sed 's/#//' out/otuTableZotus.txt > interim.txt
-# sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTableZotus.txt
+sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTableZotus.txt
+rm -rf interim.txt
 
-#count the number of unassigned sequences and put this in the summary files
-echo "Number of reads that didn't get mapped when making the 97 OTU table " >> out/Processing_Summary.txt
-echo `grep "^>" unmapped97.fa | wc -l` >> out/Processing_Summary.txt
+#count the number of unassigned sequences and put this in the summary files. Only works
+#with usearch as of April 2018
+# echo "Number of reads that didn't get mapped when making the 97 OTU table " >> out/Processing_Summary.txt
+# echo `grep "^>" unmapped97.fa | wc -l` >> out/Processing_Summary.txt
+#
+# echo "Number of reads that didn't get mapped when making the Z OTU table " >> out/Processing_Summary.txt
+# echo `grep "^>" unmappedZOTUS.fa | wc -l` >> out/Processing_Summary.txt
 
-echo "Number of reads that didn't get mapped when making the Z OTU table " >> out/Processing_Summary.txt
-echo `grep "^>" unmappedZOTUS.fa | wc -l` >> out/Processing_Summary.txt
+#manipulate OTU table to determine the number of reads that were assigned an OTU
+#first remove first line of OTU table
+sed '1d' out/otuTable97otus.txt > tmpfile
+#then remove the first column
+cut -f 2- tmpfile > tmpfile.txt
+#we now only have numbers, so we can sum them all.
+sum=0
+for num in $(cat tmpfile.txt)
+    do
+        ((sum+=num))
+done
+echo "Number of reads that mapped to 97% OTU table " >> out/Processing_Summary.txt
+echo $sum
 
-echo "If these numbers are low, then you some unmapped reads can probably be ignored" >> out/Processing_Summary.txt
-echo "However, if a lot of reads didn't map, then you will need to dig a bit to figure out why." >> out/Processing_Summary.txt
+#manipulate OTU table to determine the number of reads that were assigned an OTU
+#first remove first line of OTU table
+sed '1d' out/otuTableZotus.txt > tmpfile
+#then remove the first column
+cut -f 2- tmpfile > tmpfile.txt
+#we now only have numbers, so we can sum them all.
+sum=0
+for num in $(cat tmpfile.txt)
+    do
+        ((sum+=num))
+done
+echo "Number of reads that mapped to ZOTU table " >> out/Processing_Summary.txt
+echo $sum
+
+echo "If these numbers are much lower than the total filtered reads" >> out/Processing_Summary.txt
+echo "then you will need to dig a bit to figure out why." >> out/Processing_Summary.txt
 echo "For guidance see the USEARCH website, which has some good tips. " >> out/Processing_Summary.txt
 
 rm -rf interim.txt

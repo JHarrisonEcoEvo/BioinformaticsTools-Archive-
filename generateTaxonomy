@@ -1,0 +1,16 @@
+#!/bin/bash
+#J. Harrison
+
+#wraps taxonomy generation, merging, and clean up files for ease
+#Outputs a combinedTaxonomy file and a directory filled with possible nontarget
+#OTUs
+
+#Usage:
+
+#generateTaxonomy OTUfile
+
+usearch -sintax $1 -db ~/ref_db/rdp_its_v2.udb -tabbedout taxHyp_${1}_RDP.sintax -strand both -sintax_cutoff 0.8
+
+#note this script relies on other scripts which have paths specified in them!
+#check those scripts to make sure the reference databases, etc. are in the
+#correct spot.
