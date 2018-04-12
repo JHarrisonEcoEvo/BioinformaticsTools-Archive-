@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#Combine two files of taxonomy hypotheses output from Sintax
-#this can be useful if you use two databases for taxonomy assignment
-
-#Usage bash mergeTaxonomyFiles.sh file1 file2
-
-#make sure input files are in same order. For some reason sintax doesn't do this
 sort -k 1 $1 > tmp.txt
 sort -k 1 $2 > tmp2.txt
 
