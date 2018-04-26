@@ -74,18 +74,20 @@ main <- function() {
 
   #make new OTU table so that it includes only the taxa of interest
   otus2 <- otus[otus$OTU_ID %in% fungiOnly[,1],]
-
+  otu_ids <- otus2[,1]
+  samps <- colnames(otus)
+  samps <- samps[-1]
+  
   #remove empty columns (no taxa of interest in a sample)
-  otus2 <- otus2[,which(colSums(otus2[,2:length(otus2)])!=0)]
-
-
+  otus2 <- otus2[,-1]
+  
+  #transpose and name
   otus2 <- t(otus2)
-  colnames(otus2)  <- as.character(otus2[1,])
-  otus2 <- otus2[-1,]
-  row.names(otus2) <- gsub("X(\\d+\\.[a-h]\\d+).*","\\1",row.names(otus2))
+  colnames(otus2)  <- otu_ids
+  otus2 <- data.frame(samps, otus2)
 
-  otus2=data.frame(otus2)
-
+  otus2 <- otus2[which(rowSums(otus2[,2:length(otus2)])!=0),]
+  
   write.csv(otus2,file="cleanOTUtable_youshouldrename.csv", row.names = F)
 
 }
