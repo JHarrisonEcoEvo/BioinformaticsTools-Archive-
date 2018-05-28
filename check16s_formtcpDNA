@@ -16,12 +16,15 @@
 mkdir possible_mt_cpDNA/
 
 #the MIDORI databases (see Machida et al. 2017). These are from various metazoa
+#note these authors provide two dbs. The "Unique" db has all unique haplotypes, 
+#the "longest" db only has the longest sequence available for each organism.
 vsearch --usearch_global $1 --db ~/ref_db/MIDORI_lrRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_lr.b6
 vsearch --usearch_global $1 --db ~/ref_db/MIDORI_srRNA_RDP.fasta --id 0.97 --blast6out hits_${1}_MIDORI_sr.b6
 
 #Refseq mitochondria genomes and rRNA
 vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomeMT.b6
 vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.1.rna.fna --id 0.97 --blast6out hits_${1}_refseqRnaMT.b6
+vsearch --usearch_global $1 --db ~/ref_db/mitochondrion.2.rna.fna --id 0.97 --blast6out hits_${1}_refseqRnaMT.b6
 
 #Refseq plastid genomes and rRNA
 vsearch --usearch_global $1 --db ~/ref_db/plastid.1.1.genomic.fna --id 0.97 --blast6out hits_${1}_refseqGenomePlastid.b6
