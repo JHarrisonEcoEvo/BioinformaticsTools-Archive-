@@ -454,5 +454,5 @@ echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
  rm -rf uniqueSequences.fa
  rm -rf combined_filtered.fa
 
- tar -czf fastq_info.tar.gz  fastq_info/
+# tar -czf fastq_info.tar.gz  fastq_info/
  rm -rf fastq_info/
