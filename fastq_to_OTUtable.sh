@@ -187,7 +187,7 @@ done
 ####Step 6. Find unique read sequences and abundances
 #######################################
 
-cat *filtered.fa> combined_filtered.fa
+cat *filtered.fa > combined_filtered.fa
 
 vsearch --derep_fulllength combined_filtered.fa --output uniqueSequences.fa --sizeout
 
