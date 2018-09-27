@@ -1,28 +1,25 @@
 #!/usr/bin/Rscript
 #J. G. Harrison
-#Jan. 26, 2018
+#April 27, 2018
 
-#this script takes an otu table a taxonomy file and a sample to well key and
+#this script takes an otu table and a taxonomy file and
 #outputs an OTU table that does not have non-target taxa (e.g. no plants if you
 #are doing fungi). It specifically searches the taxonomy file for the words
-#chloroplast and mitochondria
+#chloroplast, plantae, and mitochondria
 
 #This script takes several inputs:
 #1. a taxonomy file as output from mergeTaxonomyFiles.sh
 #2. An otu table
-#3. key linking sample to well
 
 #IMPORTANT: This script has very limited utility and very likely won't work for
 #you unless you tweak it a bit, or are using my pipeline, so carefully read it!
 
 #For examples of input data see the dir Example_data/ in the git repo
 
-#Usage: Rscript useTax_to_cleanOTUtable.R combinedTaxonomyfile.txt OTUtableExample.txt Well_to_sampleKeyExample.csv clean otusToRemove.txt
+#Usage: Rscript useTax_to_cleanOTUtable.R combinedTaxonomyfile.txt OTUtableExample.txt clean
 
 #where clean is either "yes" or "no" and determines if you want
 #taxa removed that were not assigned to a phylum
-#otusToRemove.txt - is a txt file with otus that were identified as mt or cpdna
-#that you want removed (this is the output of the check16s* script).
 
 main <- function() {
   inargs <- commandArgs(trailingOnly = TRUE)

@@ -11,16 +11,12 @@
 # #The script requires a dir to be present called db/ that has a comparison database of your chosing
 # #You can change the path to this database in Step 3
 #
-# #You will want to make sure the primer stripping step (step 4) has the correct number of
+# #If you are performing 97% clustering then you will want to make sure the primer stripping step (step 4) has the correct number of
 # #bases specified to be removed
 # #this will change depending on what primers you are using
 #
 # #This script assumes demultiplexed reads that are zipped (can comment out zipped option below)
 #
-# #YOU WILL NEED an extra script to be in the working dir.
-
-# #rmv_fungal_matches.pl
-
 # #After you run this script you will want to generate taxonomic hypotheses for the OTUs/ZOTUs generated here
 # #Then you will want to remove unwanted taxa from the OTU table (e.g. host reads)
 
@@ -47,7 +43,7 @@ touch out/Processing_Summary.txt
 
 #vsearch can handle zipped files, but usearch can't
 #in a real cursory test usearch did a better job merging, so unzip
-#gunzip *fastq.gz
+gunzip *fastq.gz
 
 #######################################
 ####Step 1. Examine quality of reads
@@ -109,13 +105,20 @@ touch out/Processing_Summary.txt
 #Sample name is just the file name
 #this defaults to 10 threads, or number of cores, whichever is less
 #I doubt you will need to run more cores here very often as this is not slow
+#note usearch seems to work slightly better than vsearch
+#it automatically deals with staggered reads, which is what happens when rawreads
+#extend into nonbiological material (adaptors)
 
 for f in *R1*
 do
 	fname=$(basename $f)
 	fname2=${fname/R1/R2}
 
-usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.mergedUs.fq --fastq_minovlen 10 --fastq_maxdiffs 5 --sample $fname
+usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -fastq_maxdiffs 50 -fastq_pctid 60 -sample $fname
+
+#if you are getting poor merging see: https://www.drive5.com/usearch/manual/merge_report.html
+#if you have huge alignment then increase the fastq_maxdiffs and decrease fastq_pct
+
 	#vsearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq --fastq_maxns 10 --fastq_minovlen 10 --fastq_maxdiffs 5 --label_suffix $fname
   #--fastq_maxns means number of allowable NAs
   #--fastq_minovlen minimum overlap
@@ -136,7 +139,7 @@ done
 
 cat `ls *merged.fq | head -n 5` > testFiles.fq
 
-usearch -orient testFiles.fq -db db/rdp_its_v2.fa -tabbedout orient_out.txt
+usearch -orient testFiles.fq -db ~/ref_db/rdp_its_v2.udb -tabbedout orient_out.txt
 
 #this should show most reads are + or ? (the latter being ones that didn't match anything in the db)
 
@@ -155,12 +158,14 @@ rm -rf testFiles.fq
 
 # Strip primers (V4F is 18, V4R is 20) (ITS1F is 22, ITS2R is 20)
 # this can vary by primer pair
-# this step is not neccesary imo when using zotus/esvs/asvs
+# this step is not neccesary imo when using zotus/esvs/asvs, but I am doing it
+#just in case there is a sequence call error here that would lead to a
+#spurious OTU
 
-# for f in *merged.fq
-# do
-# 	usearch -fastx_truncate $f -stripleft 0 -stripright 0 -fastqout ${f}stripped.fq
-# done
+for f in *merged.fq
+do
+	usearch -fastx_truncate $f -stripleft 0 -stripright 0 -fastqout ${f}stripped.fq
+done
 
 #Note we don't do any more length trimming because we are using merged reads
 
@@ -286,7 +291,6 @@ vsearch -fastq_filter allstrip.fq -fastaout allstrip.fa
 vsearch -usearch_global allstrip.fa -db otus97.fa -otutabout out/otuTable97otus.txt --id 0.98
 
 #remove the hash from the first line. For some reason usearch puts this there
-#note the -i.bak  flag which makes edits inline
 
 sed 's/#//' out/otuTable97otus.txt > interim.txt
 sed 's/OTU\ ID/OTU_ID/' interim.txt > out/otuTable97otus.txt

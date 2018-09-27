@@ -5,7 +5,7 @@
 
 #Usage bash mergeTaxonomyFiles.sh file1 file2
 
-#make sure input files are in same order. For some reason sintax doesn't do this
+#make sure input files are in same order. 
 sort -k 1 $1 > tmp.txt
 sort -k 1 $2 > tmp2.txt
 
