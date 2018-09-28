@@ -191,6 +191,26 @@ cat *filtered.fa > combined_filtered.fa
 
 vsearch --derep_fulllength combined_filtered.fa --output uniqueSequences.fa --sizeout
 
+
+#Count number of original reads
+echo "Original number of forward raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
+echo `grep "@M0" *R1*.fastq | wc -l` >> out/Processing_Summary.txt
+
+echo "Original number of reverse raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
+echo `grep "@M0" *R2*.fastq | wc -l` >> out/Processing_Summary.txt
+
+#number of reads that merged successfully
+echo "Number of reads that merged successfully" >> out/Processing_Summary.txt
+echo `grep "^@" *merged.fq | wc -l` >> out/Processing_Summary.txt
+
+#number of reads that passed filtering
+echo "Number of merged reads that passed filtering" >> out/Processing_Summary.txt
+echo `grep ">" combined_filtered.fa | wc -l` >> out/Processing_Summary.txt
+
+#number of unique sequences
+echo "Number of unique sequences" >> out/Processing_Summary.txt
+echo `grep ">" uniqueSequences.fa | wc -l` >> out/Processing_Summary.txt
+
 # #######################################
 # ####Step 7. make OTUs and ZOTUs
 # #######################################
@@ -272,6 +292,16 @@ echo `eval cut -f6 offsetcheckZ.txt | grep -v "^1$"` >> out/Processing_Summary.t
 mv offsetcheckZ.txt out/
 
 rm -rf otus.aln
+
+
+#number of Otus
+echo "Number of OTUS (97% similarity threshold)that passed QC" >> out/Processing_Summary.txt
+echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
+echo `grep ">" otus97.fa | wc -l` >> out/Processing_Summary.txt
+
+echo "Number of ZOTUS that passed QC" >> out/Processing_Summary.txt
+echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
+echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
 
 ##################################################
 # Step 8. Make OTU table
@@ -403,42 +433,9 @@ mv missingVs* out/
 mv unmapped* out/
 rm -f *aln
 
- ##################################################
- # Step 9. Summary info calculation
- ##################################################
-
-#Count number of original reads
-echo "Original number of forward raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
-echo `grep "@M0" *R1*.fastq | wc -l` >> out/Processing_Summary.txt
-
-echo "Original number of reverse raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
-echo `grep "@M0" *R2*.fastq | wc -l` >> out/Processing_Summary.txt
-
-#number of reads that merged successfully
-echo "Number of reads that merged successfully" >> out/Processing_Summary.txt
-echo `grep "^@" *merged.fq | wc -l` >> out/Processing_Summary.txt
-
-#number of reads that passed filtering
-echo "Number of merged reads that passed filtering" >> out/Processing_Summary.txt
-echo `grep "$>" combined_filtered.fa | wc -l` >> out/Processing_Summary.txt
-
-#number of unique sequences
-echo "Number of unique sequences" >> out/Processing_Summary.txt
-echo `grep ">" uniqueSequences.fa | wc -l` >> out/Processing_Summary.txt
-
-#number of Otus
-echo "Number of OTUS (97% similarity threshold)that passed QC" >> out/Processing_Summary.txt
-echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
-echo `grep ">" otus97.fa | wc -l` >> out/Processing_Summary.txt
-
-echo "Number of ZOTUS that passed QC" >> out/Processing_Summary.txt
-echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
-echo `grep ">" zotus.fa | wc -l` >> out/Processing_Summary.txt
-
-
 
 # # ##################################################
-# # # Step 10. Clean up files
+# # # Step 9. Clean up files
 # # ##################################################
 
  rm -rf *merged*
