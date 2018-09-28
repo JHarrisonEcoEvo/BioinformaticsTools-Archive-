@@ -293,7 +293,6 @@ mv offsetcheckZ.txt out/
 
 rm -rf otus.aln
 
-
 #number of Otus
 echo "Number of OTUS (97% similarity threshold)that passed QC" >> out/Processing_Summary.txt
 echo "Many of these will be non-target organism (i.e. host)" >> out/Processing_Summary.txt
@@ -345,8 +344,7 @@ rm -rf interim.txt
 #manipulate OTU table to determine the number of reads that were assigned an OTU
 #first remove first line of OTU table
 sed '1d' out/otuTable97otus.txt > tmpfile
-#then remove the first column
-cut -f 2- tmpfile > tmpfile.txt
+
 #we now only have numbers, so we can sum them all.
 sum=0
 for num in $(cat tmpfile.txt)
@@ -354,13 +352,12 @@ for num in $(cat tmpfile.txt)
         ((sum+=num))
 done
 echo "Number of reads that mapped to 97% OTU table " >> out/Processing_Summary.txt
-echo $sum
+echo $sum >> out/Processing_Summary.txt
 
 #manipulate OTU table to determine the number of reads that were assigned an OTU
 #first remove first line of OTU table
 sed '1d' out/otuTableZotus.txt > tmpfile
-#then remove the first column
-cut -f 2- tmpfile > tmpfile.txt
+
 #we now only have numbers, so we can sum them all.
 sum=0
 for num in $(cat tmpfile.txt)
@@ -368,14 +365,13 @@ for num in $(cat tmpfile.txt)
         ((sum+=num))
 done
 echo "Number of reads that mapped to ZOTU table " >> out/Processing_Summary.txt
-echo $sum
+echo $sum >> out/Processing_Summary.txt
 
 echo "If these numbers are much lower than the total filtered reads" >> out/Processing_Summary.txt
 echo "then you will need to dig a bit to figure out why." >> out/Processing_Summary.txt
 echo "For guidance see the USEARCH website, which has some good tips. " >> out/Processing_Summary.txt
 
 rm -rf interim.txt
-rm -rf allstrip.fq
 
 #additional quality control step. Make sure all OTUs made it into the table
 #check these missing OTUs, if there are any, to see what they are.
