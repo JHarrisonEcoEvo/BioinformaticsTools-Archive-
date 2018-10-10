@@ -343,7 +343,7 @@ rm -rf interim.txt
 
 #manipulate OTU table to determine the number of reads that were assigned an OTU
 #first remove first line of OTU table
-sed '1d' out/otuTable97otus.txt > tmpfile
+sed '1d' out/otuTable97otus.txt > tmpfile.txt
 
 #we now only have numbers, so we can sum them all.
 sum=0
