@@ -56,7 +56,6 @@
 #load modules
 import sys #system stuff
 import re #regex
-import subprocess #allows us to use bash commands
 import Levenshtein
 
 #First get input data from STDIN
@@ -115,33 +114,34 @@ for line in forwardreads:
         #capture the preceeding characters, which is the barcode.
         pattern = "(.+)" + forwardPrimer
 
-        forwardbarcode = re.findall(pattern, read)
-        fb = forwardbarcode[0]
+        fb = re.findall(pattern, read)
 
-        if fb not in key_f:
         #Compute Levenshtein distances between the barcode and all options
         #find best option and if it is a good option, then
         #write to out file. If a poor match, then write to a file of reads
         #of unknown provenance.
+        if not fb:
+            fb = "unknown"
+        else:
+            if fb[0] not in key_f:
+                levdist = []
+                levkeys = []
+                for k in key_f:
+                    levkeys.append(k)
+                    levdist.append(Levenshtein.distance(fb[0], k))
+                    mindex = levdist.index(min(levdist))
 
-        #Make a list to hold output of distance calculations
-            levdist = []
-            levkeys = []
-            for k in key_f:
-                levkeys.append(k)
-                levdist.append(Levenshtein.distance(fb, k))
+                    #Find the minimum value in this list of distances
+                    #and if this value <1 then write to corresponding out
+                    #file. This means that one changes would need to be made in the
+                    #query sequence to match an expected barcode.
 
-        #Find the minimum value in this list of distances
-        #and if this value <1 then write to corresponding out
-        #file. This means that one changes would need to be made in the
-        #query sequence to match an expected barcode.
-
-            mindex = levdist.index(min(levdist))
-
-            if min(levdist) <= 1:
-                fb = key_f[mindex]
+                    if min(levdist) <= 1:
+                        fb = key_f[mindex]
+                    else:
+                        fb = "unknown"
             else:
-                fb = "unknown"
+                fb = fb[0]
 
     #Now extract the rear barcode
     header_r = reversereads.readline()
@@ -151,20 +151,30 @@ for line in forwardreads:
 
     pattern_r = "(.+)" + reversePrimer
 
-    reversebarcode = re.findall(pattern_r, read_r)
-    rb = reversebarcode[0]
+    rb = re.findall(pattern_r, read_r)
 
-    if rb not in key_r:
-        levdist = []
-        levkeys = []
-        for k in key_r:
-            levkeys.append(k)
-            levdist.append(Levenshtein.distance(rb, k))
-        mindex = levdist.index(min(levdist))
-        if min(levdist) <= 1:
-            rb = key_r[mindex]
+    if not rb:
+        rb = "unknown"
+    else:
+        if rb[0] not in key_r:
+            levdist = []
+            levkeys = []
+            for k in key_r:
+                levkeys.append(k)
+                levdist.append(Levenshtein.distance(rb[0], k))
+                mindex = levdist.index(min(levdist))
+
+                #Find the minimum value in this list of distances
+                #and if this value <1 then write to corresponding out
+                #file. This means that one changes would need to be made in the
+                #query sequence to match an expected barcode.
+
+                if min(levdist) <= 1:
+                    rb = key_r[mindex]
+                else:
+                    rb = "unknown"
         else:
-            rb = "unknown"
+            rb = rb[0]
 
     #Now paste the forward and reverse barcodes together and see if they
     #are in our dictionary.
