@@ -86,21 +86,19 @@ barcodes = open(fn3, "r")
 barcodeLine1 = barcodes.readline()
 forwardPrimer = barcodeLine1.split(",")[3] #recall that python starts at 0
 reversePrimer = barcodeLine1.split(",")[4]
+reversePrimer = reversePrimer.rstrip("\n")
 
-if "GGACTAC[ACT][ACG]GGGT[AT]TCTAA" != reversePrimer:
-    print("It seems that your reverse primer is different than the one in\n the script. Check line 157")
-
-#Build dictionarys/lists of barcodes and samples
+#Build lists of barcodes and samples
 key_f = []
 key_r = []
 keybarcodes = {}
+
 
 for line in open(fn3, "r"):
 
     key_f.append(line.split(',')[0])
     key_r.append(line.split(',')[1])
     bothbc = line.split(',')[0] + line.split(',')[1]
-    #This will let us extract a sample from the two barcodes we recover.
     keybarcodes[bothbc] = line.split(',')[2]
 
 #Loop through reads, parse by barcode, and append reads to correct out file
@@ -118,8 +116,9 @@ for line in forwardreads:
         pattern = "(.+)" + forwardPrimer
 
         forwardbarcode = re.findall(pattern, read)
+        fb = forwardbarcode[0]
 
-        if forwardbarcode[0] not in key_f:
+        if fb not in key_f:
         #Compute Levenshtein distances between the barcode and all options
         #find best option and if it is a good option, then
         #write to out file. If a poor match, then write to a file of reads
@@ -130,7 +129,7 @@ for line in forwardreads:
             levkeys = []
             for k in key_f:
                 levkeys.append(k)
-                levdist.append(Levenshtein.distance(forwardbarcode[0], k))
+                levdist.append(Levenshtein.distance(fb, k))
 
         #Find the minimum value in this list of distances
         #and if this value <1 then write to corresponding out
@@ -139,12 +138,10 @@ for line in forwardreads:
 
             mindex = levdist.index(min(levdist))
 
-            if min(levdist) < 1:
-                fb = key[levkeys[mindex]]
+            if min(levdist) <= 1:
+                fb = key_f[mindex]
             else:
                 fb = "unknown"
-        else:
-            fb = forwardbarcode[0]
 
     #Now extract the rear barcode
     header_r = reversereads.readline()
@@ -152,57 +149,54 @@ for line in forwardreads:
     line3_r = reversereads.readline()
     quality_r = reversereads.readline()
 
-    #NOTE: I do not understand why I can't use the reveresPrimer variable Here
-    #in the same way that I do above. However, it throws an error unless I
-    #copy the string. reversePrimer is a string identical from what I can tell
-    #to the query here.
-
-    pattern_r = "(.+)GGACTAC[ACT][ACG]GGGT[AT]TCTAA"
-
-    #e.g. this does not work !? WHY
-    #pattern_r = "(.+)" + reversePrimer
+    pattern_r = "(.+)" + reversePrimer
 
     reversebarcode = re.findall(pattern_r, read_r)
+    rb = reversebarcode[0]
 
-    if reversebarcode[0] not in key_r:
+    if rb not in key_r:
         levdist = []
         levkeys = []
         for k in key_r:
             levkeys.append(k)
-            levdist.append(Levenshtein.distance(forwardbarcode[0], k))
+            levdist.append(Levenshtein.distance(rb, k))
         mindex = levdist.index(min(levdist))
-        if min(levdist) < 1:
-            rb = key[levkeys[mindex]]
+        if min(levdist) <= 1:
+            rb = key_r[mindex]
         else:
             rb = "unknown"
-    else:
-        rb = reversebarcode[0]
 
     #Now paste the forward and reverse barcodes together and see if they
     #are in our dictionary.
     bcs = fb + rb
-    if bcs in keybarcodes:
+    #print(bcs)
+    if bcs in keybarcodes.keys():
         samp = keybarcodes[bcs]
         out_file = open(samp + "_forward", "a")
         out_file.write(header)
         out_file.write(read)
         out_file.write(line3)
         out_file.write(quality)
+        out_file.close()
 
         out_file = open(samp + "_reverse", "a")
         out_file.write(header_r)
         out_file.write(read_r)
         out_file.write(line3_r)
         out_file.write(quality_r)
+        out_file.close()
+
     else:
         out_file = open("unplaced_forward", "a")
         out_file.write(header)
         out_file.write(read)
         out_file.write(line3)
         out_file.write(quality)
+        out_file.close()
 
         out_file = open("unplaced_reverse", "a")
         out_file.write(header_r)
         out_file.write(read_r)
         out_file.write(line3_r)
         out_file.write(quality_r)
+        out_file.close()
