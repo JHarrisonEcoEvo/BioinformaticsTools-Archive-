@@ -5,8 +5,9 @@ A handful of simple scripts that help me automate common tasks.
 Hey internet! Beware! These are mostly made to fit my own workflow, or to share
 with collaborators. Feel free to use, but don't use blindly!
 
-Suggested order of operations if you want to start from demultiplexed fastqs
-from the sequence facility.
+Suggested order of operations:
+
+If you need to demultiplex your reads use the demux.py script. Note that this assumes dual-indexed paired end reads, with the barcode immediately preceeding the primer region. The script uses Levenshtein distance to correct for one error in the barcode. If your data are different, then the script should be pretty easy to modify. 
 
 1. Run fastq_to_OTUtable to get OTU tables and various QC info.
 2. Run your consensus OTU fasta files through SINTAX. I think it is best to use a
@@ -20,16 +21,15 @@ cutting taxa that were not placed in a phylum if you are dealing with the ITS.
 This is because a lot of times I found that OTUs that were not well placed in a
 phylum turned out to be plant. I think the best thing to do for ITS is run this
 script without that option, which will just remove obvious plant dna. Then go
-through and blast the uncertain OTUs and decide to keep them or not. You could
-automate this, but normally there aren't too many so I just use the web portal
-and do it by hand.
+through and blast the uncertain OTUs and decide to keep them or not. 
 6. You now should have OTU tables without plastid or mtDNA. You can then pass
 this to further scripts to either model the data, or use the rarify and normalize
 script. Note that I am no longer a fan of the rarefaction/normalization approach
 for differential abundance testing.
 
-
 Explanation of what each script does:
+
+demux.py - demultiplexes dual-indexed paired end reads, with the barcode immediately preceeding the primer region. The script uses Levenshtein distance to correct for one error in the barcode.
 
 fastq_to_OTUtable – takes input fastqs and spits out a 97% OTU table and an
 exact sequence variant table. It also gives you a lot of info on QC and them
