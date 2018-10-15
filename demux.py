@@ -184,14 +184,18 @@ for line in forwardreads:
         samp = keybarcodes[bcs]
         out_file = open(samp + "_forward", "a")
         out_file.write(header)
-        out_file.write(read)
+        #Remove the barcode
+        basesTormv = len(fb)
+        out_file.write(read[basesTormv:])
         out_file.write(line3)
         out_file.write(quality)
         out_file.close()
 
         out_file = open(samp + "_reverse", "a")
         out_file.write(header_r)
-        out_file.write(read_r)
+        #Remove the barcode
+        basesTormv = len(rb)
+        out_file.write(read_r[basesTormv:])
         out_file.write(line3_r)
         out_file.write(quality_r)
         out_file.close()
