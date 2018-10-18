@@ -188,7 +188,7 @@ for line in forwardreads:
         basesTormv = len(fb)
         out_file.write(read[basesTormv:])
         out_file.write(line3)
-        out_file.write(quality)
+        out_file.write(quality[basesTormv:])
         out_file.close()
 
         out_file = open(samp + "_reverse", "a")
@@ -197,7 +197,7 @@ for line in forwardreads:
         basesTormv = len(rb)
         out_file.write(read_r[basesTormv:])
         out_file.write(line3_r)
-        out_file.write(quality_r)
+        out_file.write(quality_r[basesTormv:])
         out_file.close()
 
     else:
