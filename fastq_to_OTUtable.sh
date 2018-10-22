@@ -117,19 +117,19 @@ do
 	fname=$(basename $f)
 	fname2=${fname/forward/reverse}
 
-#usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -fastq_maxdiffs 10 -fastq_pctid 80 -sample $fname
+usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -fastq_maxdiffs 10 -fastq_pctid 80 -sample $fname
 
 #if you are getting poor merging see: https://www.drive5.com/usearch/manual/merge_report.html
 #if you have huge alignment then increase the fastq_maxdiffs and decrease fastq_pct
 
-	vsearch --fastq_mergepairs ${fname} --reverse ${fname2} --fastqout ${fname}.merged.fq --fastq_maxdiffs 10  --fastq_truncqual 3 --fastq_allowmergestagger --fastq_minovlen 10 --label_suffix $fname
+	#vsearch --fastq_mergepairs ${fname} --reverse ${fname2} --fastqout ${fname}.merged.fq --fastq_maxdiffs 10  --fastq_truncqual 3 --fastq_allowmergestagger --fastq_minovlen 10 --label_suffix $fname
   # --fastq_maxns means number of allowable NAs
   # --fastq_minovlen minimum overlap
   # --fastq_maxdiffs max number of differences in overlap region
   # --label_suffix add file name to header
   # --fastq_allowmergestagger - allows merging of staggered reads, which happens
 	# when the 3' end of the reverse read extends beyond the 5' of the forward
-	#read
+	#read. I DO NOT THINK THIS IS A GOOD IDEA
 done
 
 #######################################
@@ -173,10 +173,10 @@ rm -rf testFiles.fq
 #just in case there is a sequence call error here that would lead to a
 #spurious OTU
 
-# for f in *merged.fq
-# do
-# 	usearch -fastx_truncate $f -stripleft 19 -stripright 20  -fastqout ${f}stripped.fq
-# done
+for f in *merged.fq
+do
+	usearch -fastx_truncate $f -stripleft 19 -stripright 20  -fastqout ${f}stripped.fq
+done
 
 #Note we don't do any more length trimming because we are using merged reads
 
@@ -189,26 +189,30 @@ rm -rf testFiles.fq
 #or at least look into the output more carefully,
 #see https://www.drive5.com/usearch/manual/pipe_readprep_filter.html
 
-for f in *merged.fq
+for f in *stripped.fq
 do
-	vsearch --fastx_filter $f --fastq_maxee 1.0 --stripleft 19 --stripright 20 --fastaout ${f}.filtered.fa
+	usearch -fastq_filter $f -fastq_maxee 1 -fastaout ${f}.filtered.fa
 done
+cat *filtered.fa > combined_filtered.fa
 
 #######################################
 ####Step 6. Find unique read sequences and abundances
 #######################################
 
+#ERROR
+
+#Vsearch is broken apparently and this does not work on Teton.
+#It works on my desktop so I think it is because of the cpus we use on Teton.
 cat *filtered.fa > combined_filtered.fa
-
-vsearch --derep_fulllength combined_filtered.fa --output uniqueSequences.fa --sizeout
-
+vsearch --derep_fulllength combined_filtered.fasta --output uniqueSequences.fa --sizeout
+#I have sent a message to the folks at vsearch to try and sort out error.
 
 #Count number of original reads
 echo "Original number of forward raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
-echo `grep "@M0" *R1*.fastq | wc -l` >> out/Processing_Summary.txt
+echo `grep "@M0" *forward| wc -l` >> out/Processing_Summary.txt
 
 echo "Original number of reverse raw reads (unmerged, unfiltered)" >> out/Processing_Summary.txt
-echo `grep "@M0" *R2*.fastq | wc -l` >> out/Processing_Summary.txt
+echo `grep "@M0" *reverse | wc -l` >> out/Processing_Summary.txt
 
 #number of reads that merged successfully
 echo "Number of reads that merged successfully" >> out/Processing_Summary.txt
@@ -233,11 +237,7 @@ usearch -cluster_otus uniqueSequences.fa -otus otus970.fa -relabel Otu -minsize 
 
 # Denoise: predict biological sequences and filter chimeras
 #also called ZOTUs, or ESVs..exact sequence variants
-#usearch -unoise3 uniqueSequences.fa -zotus zotuspre1.fa
-vsearch --cluster_unoise uniqueSequences.fa --zotus zotuspre1.fa
-
-#remove chimeras
-vsearch --uchime3_denovo zotuspre1.fa --zotus zotuspre1.fa
+usearch -unoise3 uniqueSequences.fa -zotus zotuspre1.fa
 
 #number of Otus before QC steps
 echo "Number of OTUS (97% similarity threshold) before quality checks" >> out/Processing_Summary.txt
