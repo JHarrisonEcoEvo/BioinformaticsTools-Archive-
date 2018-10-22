@@ -15,8 +15,14 @@
 # #bases specified to be removed
 # #this will change depending on what primers you are using
 #
-# #This script assumes demultiplexed reads that are zipped (can comment out zipped option below)
-#
+# #This script assumes demultiplexed reads. During merging the file names are
+#sourced and changed. You will likely need to edit the regex in this section
+# of the script.
+
+#Note: that this script requires some reference databases for certain QC steps.
+#These are freely available, but the script will throw an error at certain points
+#if you do not have these databases. See below.
+
 # #After you run this script you will want to generate taxonomic hypotheses for the OTUs/ZOTUs generated here
 # #Then you will want to remove unwanted taxa from the OTU table (e.g. host reads)
 
@@ -43,7 +49,7 @@ touch out/Processing_Summary.txt
 
 #vsearch can handle zipped files, but usearch can't
 #in a real cursory test usearch did a better job merging, so unzip
-gunzip *fastq.gz
+#gunzip *fastq.gz
 
 #######################################
 ####Step 1. Examine quality of reads
@@ -105,26 +111,25 @@ gunzip *fastq.gz
 #Sample name is just the file name
 #this defaults to 10 threads, or number of cores, whichever is less
 #I doubt you will need to run more cores here very often as this is not slow
-#note usearch seems to work slightly better than vsearch
-#it automatically deals with staggered reads, which is what happens when rawreads
-#extend into nonbiological material (adaptors)
 
-for f in *R1*
+for f in *forward
 do
 	fname=$(basename $f)
-	fname2=${fname/R1/R2}
+	fname2=${fname/forward/reverse}
 
-usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -fastq_maxdiffs 50 -fastq_pctid 60 -sample $fname
+#usearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq -fastq_maxdiffs 10 -fastq_pctid 80 -sample $fname
 
 #if you are getting poor merging see: https://www.drive5.com/usearch/manual/merge_report.html
 #if you have huge alignment then increase the fastq_maxdiffs and decrease fastq_pct
 
-	#vsearch -fastq_mergepairs ${fname} -reverse ${fname2} -fastqout ${fname}.merged.fq --fastq_maxns 10 --fastq_minovlen 10 --fastq_maxdiffs 5 --label_suffix $fname
-  #--fastq_maxns means number of allowable NAs
-  #--fastq_minovlen minimum overlap
-  #--fastq_maxdiffs max number of differences in overlap region
-  #--label_suffix add file name to header
-
+	vsearch --fastq_mergepairs ${fname} --reverse ${fname2} --fastqout ${fname}.merged.fq --fastq_maxdiffs 10  --fastq_truncqual 3 --fastq_allowmergestagger --fastq_minovlen 10 --label_suffix $fname
+  # --fastq_maxns means number of allowable NAs
+  # --fastq_minovlen minimum overlap
+  # --fastq_maxdiffs max number of differences in overlap region
+  # --label_suffix add file name to header
+  # --fastq_allowmergestagger - allows merging of staggered reads, which happens
+	# when the 3' end of the reverse read extends beyond the 5' of the forward
+	#read
 done
 
 #######################################
@@ -139,9 +144,11 @@ done
 
 cat `ls *merged.fq | head -n 5` > testFiles.fq
 
-usearch -orient testFiles.fq -db ~/ref_db/rdp_its_v2.udb -tabbedout orient_out.txt
+#I have not found a way to do this with vsearch yet. It may be possible.
+usearch -orient testFiles.fq -db /project/microbiome/jharri62/ref_db/rdp_its_v2.udb -tabbedout orient_out.txt
 
-#this should show most reads are + or ? (the latter being ones that didn't match anything in the db)
+#This should show most reads are + or ? (the latter being ones that didn't match anything in the db)
+#I rarely have issues with this.
 
 echo "Sequence orientation for the first 5 samples." >> out/Processing_Summary.txt
 
@@ -156,16 +163,20 @@ rm -rf testFiles.fq
 ####Step 4. Remove primer binding region
 #######################################
 
+#We do this in step 5 when using Vsearch
+
+#If removal of low quality bases at the end of the read is desired, then do that here.
+
 # Strip primers (V4F is 18, V4R is 20) (ITS1F is 22, ITS2R is 20)
 # this can vary by primer pair
 # this step is not neccesary imo when using zotus/esvs/asvs, but I am doing it
 #just in case there is a sequence call error here that would lead to a
 #spurious OTU
 
-for f in *merged.fq
-do
-	usearch -fastx_truncate $f -stripleft 0 -stripright 0 -fastqout ${f}stripped.fq
-done
+# for f in *merged.fq
+# do
+# 	usearch -fastx_truncate $f -stripleft 19 -stripright 20  -fastqout ${f}stripped.fq
+# done
 
 #Note we don't do any more length trimming because we are using merged reads
 
@@ -180,7 +191,7 @@ done
 
 for f in *merged.fq
 do
-	vsearch --fastx_filter $f --fastq_maxee 1.0 --fastaout ${f}.filtered.fa
+	vsearch --fastx_filter $f --fastq_maxee 1.0 --stripleft 19 --stripright 20 --fastaout ${f}.filtered.fa
 done
 
 #######################################
@@ -222,7 +233,11 @@ usearch -cluster_otus uniqueSequences.fa -otus otus970.fa -relabel Otu -minsize 
 
 # Denoise: predict biological sequences and filter chimeras
 #also called ZOTUs, or ESVs..exact sequence variants
-usearch -unoise3 uniqueSequences.fa -zotus zotuspre1.fa
+#usearch -unoise3 uniqueSequences.fa -zotus zotuspre1.fa
+vsearch --cluster_unoise uniqueSequences.fa --zotus zotuspre1.fa
+
+#remove chimeras
+vsearch --uchime3_denovo zotuspre1.fa --zotus zotuspre1.fa
 
 #number of Otus before QC steps
 echo "Number of OTUS (97% similarity threshold) before quality checks" >> out/Processing_Summary.txt
@@ -400,11 +415,10 @@ fi
 #do above for zotus
 nummiss=`wc -l out/missingZotus.fa`
 
-
-  cut -f1 out/otuTableZotus.txt > includedZotus.txt
-  grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
-  sort otuTitlesZ.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labelsZ.txt
-  usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missingZotus.fa
+cut -f1 out/otuTableZotus.txt > includedZotus.txt
+grep "^>" zotus.fa | sed "-es/>//" > otuTitlesZ.txt
+sort otuTitlesZ.txt includedZotus.txt includedZotus.txt | uniq -u > missing_labelsZ.txt
+usearch -fastx_getseqs zotus.fa -labels missing_labelsZ.txt -fastaout out/missingZotus.fa
 
 if (( $(echo "$nummiss > 1" | bc -l) )); then
   sort missing_labelsZ.txt missing_labelsZ.txt otuTitlesZ.txt | uniq -u > notmissing_labelsZ.txt
