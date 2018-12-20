@@ -5,14 +5,14 @@
 
 #Usage bash mergeTaxonomyFiles.sh file1 file2
 
-#make sure input files are in same order. 
+#make sure input files are in same order.
 sort -k 1 $1 > tmp.txt
 sort -k 1 $2 > tmp2.txt
 
 #get the fourth field, which is the taxonomic assignment that was chosen at
 #>80% probability, based on kmer matches
-cut -f4 tmp.txt > tax.txt
-cut -f4 tmp2.txt > tax2.txt
+cut -f2 tmp.txt > tax.txt
+cut -f2 tmp2.txt > tax2.txt
 
 #get OTU names, these should be the same, but will write both just in case
 cut -f1 tmp.txt > namesFile1.txt
