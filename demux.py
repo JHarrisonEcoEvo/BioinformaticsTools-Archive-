@@ -13,7 +13,8 @@
 #reverse barcode in the second field, sample name in the third field, forward
 #primer in the fourth field, and reverse primer in the fifth field. Note that
 #the fields with primer sequences don't have to be filled, just having the
-#primer in the first cell is fine. IMPORTANT: if you are using primers with
+#primer in the first cell is fine. IMPORTANT: use upper case to spell out
+#everything! If you are using primers with
 #degenerate bases then spell out the possible true bases using IUPAC codes
 #within brackets for each degenerate position. For instance, spell out Y as [CT]
 #Finally, unless you want to enter a world of pain don't make your barcode
