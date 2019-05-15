@@ -16,12 +16,10 @@ results depending on database.
 3. Merge your taxonomy info using the mergeTaxonomyFiles script.
 4. Run the check16sfor_mt_cpDNA script if you are dealing with 16s. This will
 give you an output of OTUs that are probably mitochondrial or plastid dna.
-5. Run the rmv_cpDNAmtDNA_from_OTUtable script. Consider the option for
+5. Run the cleanOTUtable script. Carefully consider the option for
 cutting taxa that were not placed in a phylum if you are dealing with the ITS.
 This is because a lot of times I found that OTUs that were not well placed in a
-phylum turned out to be plant. I think the best thing to do for ITS is run this
-script without that option, which will just remove obvious plant dna. Then go
-through and blast the uncertain OTUs and decide to keep them or not. 
+phylum turned out to be plant. This may not be needed depending upon your training databases. 
 6. You now should have OTU tables without plastid or mtDNA. You can then pass
 this to further scripts to either model the data, or use the rarify and normalize
 script. Note that I am no longer a fan of the rarefaction/normalization approach
@@ -47,16 +45,11 @@ OTU table. There is a script that makes a weighted adj. matrix too.
 
 OTUtable_to_edgeList.R - get an edge list from an OTU table.
 
-rmv_cpDNAmtDNA_from_OTUtable.R - removes possible non target OTUs.
-This script will undoubtedly need tweaked to fit somebody else's needs.
-
 rmv_matches.pl - remove lines from uc output that correspond to matches to a
  taxonomic databases
 
 uc_to_OTUtable.R - take a big uc file and turn it into an OTU table.
 Not really any reason to do this now that usearch has this function.
-
-useTax_to_cleanOTUtable.R
 
 Example_data/ - has some sample data files that may help you try out a script or
 tweak the script to your own purposes
