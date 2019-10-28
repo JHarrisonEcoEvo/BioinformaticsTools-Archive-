@@ -175,7 +175,7 @@ rm -rf testFiles.fq
 
 for f in *merged.fq
 do
-	usearch -fastx_truncate $f -stripleft 19 -stripright 20  -fastqout ${f}stripped.fq
+	usearch -fastx_truncate $f -stripleft 19  -fastqout ${f}stripped.fq
 done
 
 #Note we don't do any more length trimming because we are using merged reads
@@ -193,7 +193,6 @@ for f in *stripped.fq
 do
 	usearch -fastq_filter $f -fastq_maxee 1 -fastaout ${f}.filtered.fa
 done
-cat *filtered.fa > combined_filtered.fa
 
 #######################################
 ####Step 6. Find unique read sequences and abundances
