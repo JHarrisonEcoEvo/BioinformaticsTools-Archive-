@@ -126,6 +126,7 @@ while (defined($forward = <FORWARD>) && defined($reverse = <REVERSE>)){
     chomp($forward = <FORWARD>);
     chomp($reverse = <REVERSE>);
 
+#lookup the barcode via lookupmid
     ($fwdgoodmid, $fwdbarcodelength, $forwardmid, $forward) = lookupmid($forward,
 							      \%forwardbarcodeshash,
 							      \@forwardbarcodearray);
@@ -236,7 +237,7 @@ sub lookupmid{
     }
     else { ## potential mid error
 	($line10b, $n10) = correctmid($line10, $arrayref);
-	$minN = $n10;
+	$minN = $n10;  #n10 is number of errors
 	$whichL = 10;
 	if ($minN > 1){
 	    ($line9b, $n9) = correctmid($line9, $arrayref);
@@ -258,25 +259,26 @@ sub lookupmid{
 	else { ## has been corrected
 	    if ($whichL == 10){
 		$mid = $line10b;
-		$target =~ s/^$line10b//;
+		$target =~ s/^$line10//; #changed from line10b to line10 because the match
+    #should be to the original barcode sequence, not the corrected sequence
 	    }
 	    elsif ($whichL == 9){
 		$mid = $line9b;
-		$target =~ s/^$line9b//;
+		$target =~ s/^$line9//;
 	    }
 	    elsif ($whichL == 8){
 		$mid = $line8b;
-		$target =~ s/$line8b//;
+		$target =~ s/$line8//;
 	    }
 	    $goodmid = 1;
 	}
     }
     return($goodmid, $whichL, $mid, $target);
 }
-
+#	above this is called using makeQline(\$forward, $fwdbarcodelength);
 sub makeQline{
     my $qlineref = $_[0];
-    my $barcodelength = $_[1];
+    my $barcodelength = $_[1]; #second thing being passed in
 
     if ($barcodelength == 10){
 	$seqlength = (length ${$qlineref}) - $bclen ;
