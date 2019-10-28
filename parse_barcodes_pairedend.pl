@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-
+#THis was made by C. Alex Buerkle at University of Wyoming
 ## This program removes barcode sequences from fastq reads and places them
 ## in the name. This program also removes adpater sequences from the 3' end.
 ## Qual scores corresponding to the removed barcode and adapter are removed
