@@ -1,0 +1,19 @@
+Zotu12109       d:Fungi(1.00),p:Ascomycota(0.96),c:Leotiomycetes(0.95),o:Helotiales(0.95)       +       d:Fungi,p:Ascomycota,c:Leotiomycetes,o:Helotiales
+Zotu5648                                
+Zotu12147       d:Fungi(1.00)   +       d:Fungi
+Zotu5629        d:Fungi(1.00),p:Ascomycota(0.93),c:Leotiomycetes(0.81),o:Helotiales(0.81)       -       d:Fungi,p:Ascomycota,c:Leotiomycetes,o:Helotiales
+Zotu5675        d:Fungi(1.00),p:Basidiomycota(1.00),c:Agaricomycetes(1.00),o:Agaricales(1.00),f:Cortinariaceae(1.00),g:Cortinarius(0.95),s:Cortinarius_erubescens_SH1545302.08FU(0.04)  -       d:Fungi,p:Basidiomycota,c:Agaricomycetes,o:Agaricales,f:Cortinariaceae,g:Cortinarius
+Zotu5222        d:Fungi(1.00),p:Ascomycota(0.90),c:Leotiomycetes(0.49)  +       d:Fungi,p:Ascomycota
+Zotu12139       d:Fungi(1.00),p:Ascomycota(0.70),c:Dothideomycetes(0.70),o:Capnodiales(0.70)    +       d:Fungi
+Zotu5781        d:Fungi(1.00),p:Ascomycota(0.98),c:Leotiomycetes(0.91),o:Helotiales(0.91)       -       d:Fungi,p:Ascomycota,c:Leotiomycetes,o:Helotiales
+Zotu5661        d:Fungi(1.00),p:Ascomycota(0.99),c:Dothideomycetes(0.96),o:Capnodiales(0.96),f:Teratosphaeriaceae(0.86),g:Elasticomyces(0.81),s:Elasticomyces_elasticus_SH1645391.08FU(0.81)    -
+       d:Fungi,p:Ascomycota,c:Dothideomycetes,o:Capnodiales,f:Teratosphaeriaceae,g:Elasticomyces,s:Elasticomyces_elasticus_SH1645391.08FU
+Zotu9710        d:Fungi(1.00),p:Ascomycota(0.67),c:Eurotiomycetes(0.67),o:Chaetothyriales(0.67),f:Herpotrichiellaceae(0.53)     +       d:Fungi
+Zotu12094       d:Fungi(1.00),p:Ascomycota(0.99),c:Dothideomycetes(0.99),o:Venturiales(0.99),f:Venturiaceae(0.84),g:Venturia(0.75),s:Venturia_atriseda_SH1626915.08FU(0.36)     -       d:Fungi,p:Ascomycota,c:Dothideomycetes,o:Venturiales,f:Venturiaceae
+Zotu5718        d:Fungi(1.00),p:Ascomycota(0.94),c:Dothideomycetes(0.91),o:Capnodiales(0.91),f:Teratosphaeriaceae(0.77),g:Xenoconiothyrium(0.06),s:Xenoconiothyrium_catenata_SH1154609.08FU(0.06)
+       -       d:Fungi,p:Ascomycota,c:Dothideomycetes,o:Capnodiales
+Zotu5936        d:Fungi(1.00),p:Ascomycota(0.97),c:Dothideomycetes(0.89),o:Capnodiales(0.88),f:Teratosphaeriaceae(0.35),g:Meristemomyces(0.09),s:Meristemomyces_arctostaphylos_SH1521423.08FU(0.08)     +       d:Fungi,p:Ascomycota,c:Dothideomycetes,o:Capnodiales
+Zotu5778        d:Fungi(1.00)   -       d:Fungi
+Zotu5775        d:Fungi(1.00),p:Ascomycota(0.93),c:Dothideomycetes(0.89),o:Capnodiales(0.89),f:Teratosphaeriaceae(0.82),g:Neocatenulostroma(0.54),s:Neocatenulostroma_abietis_SH2316213.08FU(0.37)      +       d:Fungi,p:Ascomycota,c:Dothideomycetes,o:Capnodiales,f:Teratosphaeriaceae
+Zotu2869        d:Fungi(1.00),p:Ascomycota(0.95)        +       d:Fungi,p:Ascomycota
+Zotu12551       d:Fungi(1.00),p:Ascomycota(0.75)        -       d:Fungi
