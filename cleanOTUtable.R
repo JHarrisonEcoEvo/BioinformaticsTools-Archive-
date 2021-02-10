@@ -46,7 +46,17 @@ main <- function() {
     plantOtus <- tax[plantIndices, 1]
     plantsum <- colSums(otus[otus[,1] %in% plantOtus,2:length(otus)])
     otus <- otus[!(otus[,1] %in% plantOtus),]
-    otus[1+length(otus[,1]),] <- c("plant",plantsum)
+    otus[1+length(otus[,1]),1] <- "plant"
+    otus[length(otus[,1]),2:length(otus)] <- plantsum
+  }
+  
+  #remove ISD
+  isdIndices <- which(otus$OTUID %in% isd$V1)
+  if( length(isdIndices) > 0 ){
+    isdsum <- colSums(otus[otus$OTUID %in% isd$V1,2:length(otus)])
+    otus <- otus[!(otus$OTUID %in% isd$V1),]
+    otus[1+length(otus[,1]),1] <- "ISD"
+    otus[length(otus[,1]),2:length(otus)] <- isdsum
   }
   
   duds <- which(nchar(tax[,4]) == 0) #taxa not assigned a taxonomic hypothesis
@@ -54,7 +64,8 @@ main <- function() {
     dudOtus <- tax[duds, 1]
     dudsum <- colSums(otus[otus[,1] %in% dudOtus,2:length(otus)])
     otus <- otus[!(otus[,1] %in% dudOtus),]
-    otus[1+length(otus[,1]),] <- c("duds",dudsum)
+    otus[1+length(otus[,1]),1] <- "duds"
+    otus[length(otus[,1]),2:length(otus)] <- dudsum
   }
   
   mtdna <- c(grep("[mM]itochondria", tax[,4]))
@@ -64,14 +75,6 @@ main <- function() {
     mtsum <- colSums(otus[otus[,1] %in% mtOtu,2:length(otus)])
     otus <- otus[!(otus[,1] %in% mtOtu),]
     otus[1+length(otus[,1]),] <- c("mtDNA",mtsum)
-  }
-  
-  #remove ISD
-  isdIndices <- which(otus$OTUID %in% isd$V1)
-  if( length(isdIndices) > 0 ){
-    isdsum <- colSums(otus[otus$OTUID %in% isd$V1,2:length(otus)])
-    otus <- otus[!(otus$OTUID %in% isd$V1),]
-    otus[1+length(otus[,1]),] <- c("ISD",isdsum)
   }
   
   ######################################################################################################
@@ -85,6 +88,8 @@ main <- function() {
   #use it until you can get clarification. Talk to Josh if you want something here explained. This sort
   # of wrangling is the main way that errors happen (not in analysis), so it is worth being really careful.
   ######################################################################################################
+  
+  print(paste("Ended with ", length(otus[,1]), " rows. Note that some rows are multiple taxa combined.", sep=""))
   
   write.csv(otus,file="cleanOTUtable_youshouldrename.csv", row.names = F)
 }
