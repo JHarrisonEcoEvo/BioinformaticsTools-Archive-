@@ -69,7 +69,7 @@ if len(hits) >= 1:
 
 
 #If we want to do a more robust alignment we can use tools from Biopython
-if biopython_switch == True:
+if biopython_switch == "y":
     from Bio import pairwise2
     # Import format_alignment method
     from Bio.pairwise2 import format_alignment
