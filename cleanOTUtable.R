@@ -5,91 +5,103 @@
 #this script takes an otu table and a taxonomy file and
 #outputs an OTU table that does not have non-target taxa (e.g. no plants if you
 #are doing fungi). It specifically searches the taxonomy file for the words
-#chloroplast, plantae, and mitochondria
+#chloroplast, plantae, and mitochondria. It combines plants into one row, mitochondria into another, the ISD
+#into another, and stuff that doesn't match any known phyla into another. 
 
 #This script takes several inputs:
 #1. a taxonomy file as output from mergeTaxonomyFiles.sh
 #2. An otu table
+#3. The output of a usearch/vsearch search of OTU sequences to find the ISD in blast6 format
+#To make the isd input one can use a command like this:
+#vsearch --usearch_global ${f} --db  /project/microbiome/ref_db/synthgene.fasta 
+#--strand both --blast6out ${f}_isd --id 0.85 --threads 32
 
-#IMPORTANT: This script has very limited utility and very likely won't work for
-#you unless you tweak it a bit, or are using my pipeline, so carefully read it!
+#IMPORTANT: If you do not check that your input files are correctly formatted this script will not work.
 
 #For examples of input data see the dir Example_data/ in the git repo
 
-#Usage: Rscript cleanOTUtable.R combinedTaxonomyfile.txt OTUtableExample.txt clean
+#Usage: Rscript cleanOTUtable.R taxonomyExample.txt OTUtableExample.txt ISDhitsExample
 
-#where clean is either "yes" or "no" and determines if you want
-#taxa removed that were not assigned to a phylum
+
+# Code for development, users should ignore 
+# tax <- read.delim(file="processedData/its_90.sintax", header=F,stringsAsFactors = F)
+# otus=read.delim(file="processedData/otuTables/its90_otuTable", header=T,stringsAsFactors = F)
+# isd=read.delim(file="~/git_repo/bioinformaticsTools/Example_data/ISDhitsExample", header=T,stringsAsFactors = F)
 
 main <- function() {
   inargs <- commandArgs(trailingOnly = TRUE)
   print(inargs)
 
   #input otu table, sample-well key, and taxonomy file
-  tax=read.delim(file=inargs[1], header=F)
-  otus=read.delim(file=inargs[2], header=T)
-  clean=inargs[3]
+  tax=read.delim(file=inargs[1], header=F, stringsAsFactors = F, fill = T)
+  otus=read.delim(file=inargs[2], header=T, stringsAsFactors = F)
 
-  #now we need to pick which OTUs to keep
-  #I am first removing any OTUs that either database said were plants.
-  #then I will subset the data to just keep only those OTUs that one or the other database
-  #had >80% confidence in placement to phylum. In previous work I have found that <80% placement to
-  #phylum often match nontarget taxa on NCBI...so I remove those too.
+  if(grepl(";seqs=\\d+;size=\\d+", tax[1,1])){
+   tax[,1] <- gsub(";seqs=\\d+;size=\\d+","", tax[,1])
+  }
 
-  #note these are just operating on the 4th field because the UNITE database out has a different format
+  if(length(inargs) == 3){
+  	isd=read.delim(file=inargs[3], header=F,stringsAsFactors = F)
+  }
+
   print(paste("Started with ", length(tax[,1]), " taxa", sep=""))
 
-  fungiOnly <- tax[tax[,3]!="d:Plantae",]
-  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing plant otus found by taxonomy db 1", sep=""))
+  plantIndices <- c(grep("[pP]lant", tax[,4]),
+    grep("[cC]hloroplast", tax[,4]))
 
-  fungiOnly <- fungiOnly[fungiOnly[,4]!="d:Plantae",]
-  print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing plant otus found by taxonomy db 2", sep=""))
+  if( length(plantIndices) > 0 ){
+    plantOtus <- tax[plantIndices, 1]
+    plantsum <- colSums(otus[otus[,1] %in% plantOtus,2:length(otus)])
+    otus <- otus[!(otus[,1] %in% plantOtus),]
+    otus[1+length(otus[,1]),1] <- "plant"
+    otus[length(otus[,1]),2:length(otus)] <- plantsum
+  }
+
+  #remove ISD
+  if(length(inargs) == 3){
+  isdIndices <- which(otus$OTUID %in% isd$V1)
+  if( length(isdIndices) > 0 ){
+    isdsum <- colSums(otus[otus$OTUID %in% isd$V1,2:length(otus)])
+    otus <- otus[!(otus$OTUID %in% isd$V1),]
+    otus[1+length(otus[,1]),1] <- "ISD"
+    otus[length(otus[,1]),2:length(otus)] <- isdsum
+  }
+  }
+
+  duds <- which(nchar(tax[,4]) == 0) #taxa not assigned a taxonomic hypothesis
+  if( length(duds) > 0 ){
+    dudOtus <- tax[duds, 1]
+    dudsum <- colSums(otus[otus[,1] %in% dudOtus,2:length(otus)])
+    otus <- otus[!(otus[,1] %in% dudOtus),]
+    otus[1+length(otus[,1]),1] <- "duds"
+    otus[length(otus[,1]),2:length(otus)] <- dudsum
+  }
   
+  mtdna <- c(grep("[mM]itochondria", tax[,4]))
   
-  if(length(grep("Chloroplast", fungiOnly[,3]))>0){
-    fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,3])),]
-    print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus from db 1", sep=""))
+  if( length(mtdna) > 0 ){
+    mtOtu <- tax[mtdna, 1]
+    mtsum <- colSums(otus[otus[,1] %in% mtOtu,2:length(otus)])
+    otus <- otus[!(otus[,1] %in% mtOtu),]
+    otus[1+length(otus[,1]),] <- c("mtDNA",mtsum)
   }
-  if(length(grep("Chloroplast", fungiOnly[,4]))>0){
-    fungiOnly= fungiOnly[-(grep("Chloroplast", fungiOnly[,4])),]
-    print(paste("Now have ", length(fungiOnly[,1]), " taxa after removing cp otus from db 2", sep=""))
-  }
-
-  #this keeps any row that for either database there is more than 10 characters
-  #describing the taxonomic hypothesis.
-  #this gets rid of anything that was not identified to phylum by
-  #one or the other db.
-  #IMPORTANT: this may very well get rid of target taxa if you are working in
-  #a remote system. Use with caution.
-
-  if(clean=="yes"){
-    fungiOnly = fungiOnly[which(nchar(as.character(fungiOnly[,3])) > 10 | nchar(as.character(fungiOnly[,4])) > 10),]
-  }
-
+  
   ######################################################################################################
   #NOTE: I strongly recommend doing some spot checks of the OTUs that made it through. Find some that were
-  #not id'd as fungi by both databases and go to the NCBI web interface and paste them in there.
-  #if they show up as some other eukaryote then it may be worth scrubbing the data more
+  #not id'd and go to the NCBI web interface and paste the sequences in there. Could be that some of the
+  #stuff removed is a target taxon.
+  
+  #
+  #Also, CHECK that this script worked right. Do your own wrangling to check that the ISD summing worked
+  #for example. If you do not understand what this script is doing, then it is probably best to not 
+  #use it until you can get clarification. Talk to Josh if you want something here explained. This sort
+  # of wrangling is the main way that errors happen (not in analysis), so it is worth being really careful.
   ######################################################################################################
-
-  #make new OTU table so that it includes only the taxa of interest
-  otus2 <- otus[otus$OTU_ID %in% fungiOnly[,1],]
-  otu_ids <- otus2[,1]
-  samps <- colnames(otus)
-  samps <- samps[-1]
   
-  #remove empty columns (no taxa of interest in a sample)
-  otus2 <- otus2[,-1]
+  print(paste("Ended with ", length(otus[,1]), " rows. Note that some rows are multiple taxa combined.", sep=""))
   
-  #transpose and name
-  otus2 <- t(otus2)
-  colnames(otus2)  <- otu_ids
-  otus2 <- data.frame(samps, otus2)
-
-  otus2 <- otus2[which(rowSums(otus2[,2:length(otus2)])!=0),]
-  
-  write.csv(otus2,file="cleanOTUtable_youshouldrename.csv", row.names = F)
-
+  write.csv(otus,file="cleanOTUtable_youshouldrename.csv", row.names = F)
 }
 
 main()
+
