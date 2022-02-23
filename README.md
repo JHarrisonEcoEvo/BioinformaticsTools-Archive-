@@ -5,6 +5,8 @@ A handful of simple scripts that help me automate common tasks.
 Hey internet! Beware! These are mostly made to fit my own workflow, or to share
 with collaborators. Feel free to use, but don't use blindly!
 
+Also, a lot of this stuff is no longer my favorite approach, but I am leaving this here for posterity.
+
 Suggested order of operations:
 
 If you need to demultiplex your reads use the demux.py script. Note that this assumes dual-indexed paired end reads, with the barcode immediately preceeding the primer region. The script uses Levenshtein distance to correct for one error in the barcode. If your data are different, then the script should be pretty easy to modify. 
